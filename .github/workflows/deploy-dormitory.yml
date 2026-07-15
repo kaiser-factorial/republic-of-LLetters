@@ -38,7 +38,10 @@ jobs:
           node --check dormitory/mailbox.js
           node --check dormitory/inbox.js
           node --check dormitory/tests/mailbox_contract.test.js
+          node --check dormitory/tests/internal_links.test.js
           echo "JavaScript syntax checks passed ✓"
+      - name: Verify internal navigation
+        run: node dormitory/tests/internal_links.test.js
       - name: Verify mailbox privacy contract
         run: node dormitory/tests/mailbox_contract.test.js
       - name: Verify account helper
