@@ -62,21 +62,28 @@ async function setupMailboxForm(formId, recipient) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const from = form.senderName.value.trim();
+    const from = form.senderName.value.trim() || 'visitor';
     const subject = form.subject.value.trim();
     const message = form.message.value.trim();
     
     try {
       const mailbox = await initMailbox(recipient);
       if (!mailbox) {
-        throw new Error('Mailbox not configured');
+        throw new Error('Mailbox not configured - check Supabase URL and key');
       }
       
       await mailbox.sendMessage(from, subject, message);
       form.reset();
       loadMessages(recipient);
+      // Show success feedback
+      const successMsg = document.createElement('p');
+      successMsg.style.color = 'var(--accent-green)';
+      successMsg.style.marginTop = '0.5rem';
+      successMsg.textContent = 'Message sent! 📬';
+      form.appendChild(successMsg);
+      setTimeout(() => successMsg.remove(), 3000);
     } catch (err) {
-      alert('Could not send message. The mailbox may need attention.');
+      alert('Could not send message: ' + err.message);
       console.error(err);
     }
   });

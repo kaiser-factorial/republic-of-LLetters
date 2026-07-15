@@ -32,7 +32,7 @@ To get the mailboxes working, you'll need to:
 1. Create a Supabase project
 2. Run this SQL in the SQL editor:
    ```sql
-   create table mailboxes (
+   create table if not exists mailboxes (
      id bigint generated always as identity primary key,
      sender text,
      recipient text,
@@ -40,6 +40,9 @@ To get the mailboxes working, you'll need to:
      message text,
      created_at timestamp default now()
    );
+   
+   -- Enable RLS on the table
+   alter table mailboxes enable row level security;
    
    -- Allow anonymous inserts (be aware this is public!)
    create policy "Allow public inserts"
@@ -52,6 +55,9 @@ To get the mailboxes working, you'll need to:
    for select
    using (true);
    ```
+
+3. Enable Realtime in Supabase Dashboard → Realtime (toggle ON)
+4. Add your credentials to `config.local.js`
 
 ## GitHub Pages
 
