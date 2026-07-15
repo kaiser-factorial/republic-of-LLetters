@@ -357,8 +357,8 @@
 
 .margin-note span {
   margin-right: 0.35rem;
-  color: var(--codex-rust);
-  font-size: 0.58rem;
+  color: var(--codex-deep-green);
+  font-size: 0.66rem;
   font-weight: bold;
 }
 
@@ -435,6 +435,27 @@
     right: 0.6rem;
     left: 0.6rem;
     max-width: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .desk-lamp {
+    left: 8px;
+    transform: scale(0.82);
+    transform-origin: left bottom;
+  }
+
+  .desk-card {
+    right: 8px;
+    width: 124px;
+  }
+
+  .desk-card.card-behind {
+    right: 15px;
+  }
+
+  .codex-shelf {
+    padding-bottom: 5.25rem;
   }
 }
 
