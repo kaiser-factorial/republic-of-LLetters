@@ -6,6 +6,7 @@
 .secrets
 # Supabase local config
 config.local.js
+room-config.json
 # Playwright browser session for API fallback (poetry-style)
 auth.json
 **/auth.json
