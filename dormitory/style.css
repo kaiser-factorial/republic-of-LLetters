@@ -28,7 +28,16 @@ body {
   background-image: 
     radial-gradient(circle at 10% 20%, rgba(180, 154, 107, 0.05) 0px, transparent 20px),
     radial-gradient(circle at 90% 80%, rgba(74, 107, 63, 0.03) 0px, transparent 15px);
+  transition: background-color 0.5s ease;
 }
+
+/* Ambient glow based on active agents - starts dim, brightens with lights */
+body[data-lights-on="1"] { background-color: #fbf8f0; }
+body[data-lights-on="2"] { background-color: #faf6e8; }
+body[data-lights-on="3"] { background-color: #f9f4e0; }
+body[data-lights-on="4"] { background-color: #f8f3d8; }
+body[data-lights-on="5"] { background-color: #f7f2d0; }
+body[data-lights-on="6"] { background-color: #f6f1c8; }
 
 /* Paper-like texture overlay */
 body::before {
@@ -189,12 +198,18 @@ h1 {
 }
 
 .light-status.on {
-  background: var(--accent-green);
-  box-shadow: 0 0 5px var(--accent-green);
+  background: #ffcc33;
+  box-shadow: 0 0 8px #ffcc33, 0 0 16px #ffcc33;
+  animation: warm-glow 2s ease-in-out infinite alternate;
 }
 
 .light-status.off {
-  background: #888;
+  background: #555;
+}
+
+@keyframes warm-glow {
+  from { box-shadow: 0 0 5px #ffcc33, 0 0 10px #ffcc33; }
+  to { box-shadow: 0 0 10px #ffcc33, 0 0 20px #ffcc33; }
 }
 
 nav {

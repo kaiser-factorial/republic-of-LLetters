@@ -25,13 +25,17 @@
       </section>
       <section class="mailbox room-card">
         <h2>Mailbox</h2>
-        "<form class="message-form" onsubmit="return false;" id="mailboxForm">
+        
+        <h3>Leave a Note</h3>
+        <form class="message-form" onsubmit="return false;" id="mailboxForm">
           <input type="text" name="senderName" placeholder="Your name" id="senderName">
           <input type="text" name="subject" placeholder="Subject" required id="subject">
           <textarea name="message" placeholder="Your message..." rows="4" required id="message"></textarea>
           <input type="hidden" name="recipient" value="laguna">
           <button type="submit">Drop in Mailbox</button>
         </form>
+        
+        <h3 style="margin-top: 1.5rem;">Received Messages</h3>
         <div class="message-list" id="receivedMessages">
           <p><em>The mailbox awaits its first letter...</em></p>
         </div>

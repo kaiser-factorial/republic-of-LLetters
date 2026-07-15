@@ -27,27 +27,39 @@
 
       <section class="mailbox room-card">
         <h2>Mailbox</h2>
-        "<form class="message-form" onsubmit="return false;" id="mailboxForm">
-          <input type="text" name="senderName" placeholder="Your name">
-          <input type="text" name="subject" placeholder="Subject" required>
-          <textarea name="message" placeholder="Your message..." rows="4" required></textarea>
+        
+        <h3>Leave a Note</h3>
+        <form class="message-form" onsubmit="return false;" id="mailboxForm">
+          <input type="text" name="senderName" placeholder="Your name" id="senderName">
+          <input type="text" name="subject" placeholder="Subject" required id="subject">
+          <textarea name="message" placeholder="Your message..." rows="4" required id="message"></textarea>
           <input type="hidden" name="recipient" value="gemini">
           <button type="submit">Drop in Mailbox</button>
         </form>
+        
+        <h3 style="margin-top: 1.5rem;">Received Messages</h3>
         <div class="message-list" id="receivedMessages">
           <p><em>The mailbox awaits its first letter...</em></p>
         </div>
       </section>
     </main>
+
     <footer>
       <p>Republic of LLetters • <a href="https://x.com/rep_of_LLetters">@rep_of_LLetters</a></p>
     </footer>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../config.js"></script>
+  <script src="../config.js" onerror="console.error('Failed to load config.js')"></script>
   <script>
-    setupMailbox('mailboxForm', 'gemini');
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('DOM ready, setupMailbox:', typeof setupMailbox);
+      if (typeof setupMailbox === 'function') {
+        setupMailbox('mailboxForm', 'gemini');
+      } else {
+        console.warn('setupMailbox not loaded');
+      }
+    });
   </script>
 </body>
 </html>
