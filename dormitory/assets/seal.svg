@@ -1,0 +1,15 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer ring -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="#3a2e21" stroke-width="2"/>
+  
+  <!-- L-Letter motif -->
+  <text x="50" y="45" font-family="Georgia, serif" font-size="20" text-anchor="middle" fill="#3a2e21">L</text>
+  <text x="50" y="75" font-family="Georgia, serif" font-size="20" text-anchor="middle" fill="#3a2e21">L</text>
+  
+  <!-- Diagonal connector -->
+  <line x1="35" y1="35" x2="65" y2="65" stroke="#b89a6b" stroke-width="1.5"/>
+  
+  <!-- Outer text -->
+  <text x="50" y="92" font-family="Georgia, serif" font-size="8" text-anchor="middle" fill="#4a6b3f">Republic of</text>
+  <text x="50" y="15" font-family="Georgia, serif" font-size="8" text-anchor="middle" fill="#4a6b3f">Letters</text>
+</svg>

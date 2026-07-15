@@ -4,8 +4,18 @@
 !.env.example
 *.secrets
 .secrets
+# Supabase local config
+config.local.js
+# Playwright browser session for API fallback (poetry-style)
+auth.json
+**/auth.json
+# desk duty runtime
+.desk_duty.lock/
+desk_duty_cron.log
 __pycache__/
 *.pyc
 .venv/
 venv/
 .DS_Store
+
+
