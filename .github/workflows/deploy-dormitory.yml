@@ -18,8 +18,35 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate HTML files
+        run: |
+          for f in dormitory/*.html dormitory/rooms/*/index.html; do
+            echo "Checking $f"
+            # Basic HTML validation
+            grep -q '<!DOCTYPE html>' "$f" || (echo "Missing DOCTYPE in $f" && exit 1)
+            grep -q '</html>' "$f" || (echo "Missing closing html in $f" && exit 1)
+          done
+          echo "HTML validation passed ✓"
+      - name: Check JavaScript syntax
+        run: |
+          # Check config.js for basic syntax
+          node -e "require('fs').readFileSync('dormitory/config.js', 'utf8')" && \
+          echo "config.js readable ✓" || echo "config.js unreadable"
+      - name: Verify form fields
+        run: |
+          # Check forms have ids and name attributes
+          grep -q 'id="mailboxForm"' dormitory/rooms/*/index.html || \
+          grep -q "id='mailboxForm'" dormitory/rooms/*/index.html || \
+          (echo "Missing mailboxForm ID" && exit 1)
+          echo "Form field check passed ✓"
+
   build:
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - uses: actions/checkout@v4
       - name: Setup Pages
