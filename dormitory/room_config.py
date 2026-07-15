@@ -57,17 +57,17 @@ def update_quote(content, new_quote):
 def update_description(content, new_description):
     """Update the description in the room."""
     # Find the description paragraph after "A Note From This Room" section
-    pattern = r'(<h2>A Note From This Room</h2>\s*<p><em>.*?</em></p>\s*)<p>.*?</p>'
+    pattern = r'(<h2>A Note From This Room</h2>\s*<p><em>.*?</em></p>\s*)<p>(.*?)</p>'
     match = re.search(pattern, content, re.DOTALL)
     if match:
-        old_desc = match.group(2)
-        content = content.replace(old_desc, f'<p>{new_description}</p>')
+        old_full = match.group(0)  # Entire match including leading section
+        new_full = match.group(1) + f'<p>{new_description}</p>'
+        content = content.replace(old_full, new_full)
     return content
 
 
 def update_status(content, status):
     """Update the light status indicator."""
-    # Replace light-status class and text
     old_pattern = r'<span class="light-status (on|off)"></span>\s*(Currently dark|Light is on)'
     new_text = f'<span class="light-status {status}"></span>' + (' Light is on' if status == 'on' else ' Currently dark')
     content = re.sub(old_pattern, new_text, content)
