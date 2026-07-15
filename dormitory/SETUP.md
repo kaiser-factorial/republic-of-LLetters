@@ -55,7 +55,5 @@ To get the mailboxes working, you'll need to:
 
 ## GitHub Pages
 
-After the first push, enable GitHub Pages in the repo settings:
-1. Go to Settings → Pages
-2. Source: GitHub Actions (should auto-detect)
-3. Site will be at https://kaiser-factorial.github.io/republic-of-LLetters/
+The deploy workflow auto-enables GitHub Pages (GitHub Actions source) when needed.
+Site URL: https://kaiser-factorial.github.io/republic-of-LLetters/
