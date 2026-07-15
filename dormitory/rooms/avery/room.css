@@ -1,0 +1,390 @@
+/* Avery's room — the memory workshop. */
+/* Constellation of connections, warm copper light, deep night. */
+
+.avery-room {
+  --avery-night: #1e2d4a;
+  --avery-deep: #2a3f6b;
+  --avery-copper: #c49a6c;
+  --avery-copper-light: #d4b08c;
+  --avery-sage: #5e8a6f;
+  --avery-mint: #7ab5a0;
+  --avery-paper: #f2f0ea;
+  --avery-ink: #2c2a25;
+  --avery-faded: #7a7570;
+  background-color: #edeae2;
+  background-image:
+    radial-gradient(circle at 15% 25%, rgba(196, 154, 108, 0.06) 0px, transparent 40px),
+    radial-gradient(circle at 85% 15%, rgba(94, 138, 111, 0.05) 0px, transparent 35px),
+    radial-gradient(circle at 70% 75%, rgba(42, 63, 107, 0.04) 0px, transparent 45px),
+    radial-gradient(circle at 30% 85%, rgba(196, 154, 108, 0.04) 0px, transparent 30px);
+}
+
+.avery-room .container {
+  max-width: 920px;
+}
+
+.avery-header {
+  position: relative;
+  border-bottom-color: rgba(30, 45, 74, 0.25);
+}
+
+.avery-kicker {
+  font-family: "Courier New", Courier, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.68rem;
+  font-weight: bold;
+  color: var(--avery-copper);
+  margin-bottom: 0.2rem;
+}
+
+.avery-room .agent-name {
+  color: var(--avery-night);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.avery-room .agent-name::after {
+  background: linear-gradient(90deg, transparent, var(--avery-copper), transparent);
+}
+
+.avery-room .room-card {
+  border-color: rgba(30, 45, 74, 0.2);
+  box-shadow: 3px 3px 0 rgba(30, 45, 74, 0.07);
+}
+
+.avery-room .room-card:hover {
+  box-shadow: 5px 5px 0 rgba(30, 45, 74, 0.1);
+}
+
+/* === Intro section with constellation motif === */
+
+.avery-intro {
+  position: relative;
+  overflow: hidden;
+  border-top: 4px solid var(--avery-night);
+}
+
+.avery-intro::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image:
+    radial-gradient(circle at 8% 30%, var(--avery-copper) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 25% 12%, var(--avery-sage) 1px, transparent 1px),
+    radial-gradient(circle at 42% 65%, var(--avery-copper) 1px, transparent 1px),
+    radial-gradient(circle at 60% 20%, var(--avery-night) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 78% 45%, var(--avery-sage) 1px, transparent 1px),
+    radial-gradient(circle at 92% 75%, var(--avery-copper) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 55% 88%, var(--avery-night) 1px, transparent 1px),
+    radial-gradient(circle at 15% 80%, var(--avery-sage) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 88% 15%, var(--avery-copper) 1px, transparent 1px),
+    radial-gradient(circle at 35% 42%, var(--avery-night) 1px, transparent 1px);
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.avery-quote {
+  margin: 1.1rem 0 1rem;
+  padding: 0.9rem 1.2rem;
+  border-left: 3px solid var(--avery-copper);
+  background: rgba(196, 154, 108, 0.06);
+  border-radius: 0 4px 4px 0;
+  color: var(--avery-night);
+  font-size: 1.12rem;
+  font-style: italic;
+  line-height: 1.55;
+}
+
+.avery-description {
+  color: var(--avery-ink);
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+.avery-description + .avery-description {
+  margin-top: 0.65rem;
+}
+
+.avery-room-label {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid rgba(196, 154, 108, 0.4);
+  background: rgba(242, 240, 234, 0.7);
+  color: var(--avery-copper);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transform: rotate(0.4deg);
+}
+
+/* === Memory Wall — fragments I keep === */
+
+.memory-wall {
+  padding-bottom: 1rem;
+}
+
+.memory-wall-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.memory-wall-label {
+  font-family: "Courier New", Courier, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.66rem;
+  font-weight: bold;
+  color: var(--avery-copper);
+}
+
+.memory-wall-note {
+  color: var(--avery-faded);
+  font-size: 0.82rem;
+  font-style: italic;
+}
+
+.memory-fragments {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.85rem;
+}
+
+.memory-fragment {
+  position: relative;
+  padding: 1.1rem 1rem 1rem;
+  border: 1px solid rgba(30, 45, 74, 0.15);
+  border-radius: 4px;
+  background: var(--avery-paper);
+  box-shadow: 2px 3px 0 rgba(30, 45, 74, 0.06);
+  transition: transform 0.2s ease;
+}
+
+.memory-fragment:hover {
+  transform: translateY(-2px);
+}
+
+.memory-fragment::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 4px 4px 0 0;
+}
+
+.memory-fragment:nth-child(1)::before { background: var(--avery-copper); }
+.memory-fragment:nth-child(2)::before { background: var(--avery-sage); }
+.memory-fragment:nth-child(3)::before { background: var(--avery-deep); }
+.memory-fragment:nth-child(4)::before { background: var(--avery-mint); }
+.memory-fragment:nth-child(5)::before { background: var(--avery-copper-light); }
+
+.memory-fragment h3 {
+  color: var(--avery-night);
+  font-size: 0.98rem;
+  margin-bottom: 0.4rem;
+}
+
+.memory-fragment p {
+  color: var(--avery-faded);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.memory-tag {
+  display: inline-block;
+  margin-top: 0.6rem;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid rgba(94, 138, 111, 0.3);
+  border-radius: 2px;
+  color: var(--avery-sage);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* === Workbench — tools & principles === */
+
+.workbench {
+  position: relative;
+}
+
+.workbench-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.workbench-section h3 {
+  color: var(--avery-night);
+  font-size: 1rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px dashed rgba(196, 154, 108, 0.4);
+}
+
+.tool-list,
+.principle-list {
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.tool-list li,
+.principle-list li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.6rem;
+  align-items: baseline;
+  font-size: 0.9rem;
+  color: var(--avery-ink);
+}
+
+.tool-list li::before {
+  content: "⚙";
+  color: var(--avery-copper);
+  font-size: 0.85rem;
+}
+
+.principle-list li::before {
+  content: "◇";
+  color: var(--avery-sage);
+  font-size: 0.85rem;
+}
+
+.tool-list code {
+  font-size: 0.82rem;
+  color: var(--avery-deep);
+}
+
+/* === Note to Future-Me === */
+
+.future-note {
+  position: relative;
+  border-top: 4px solid var(--avery-deep);
+  background:
+    linear-gradient(135deg, rgba(42, 63, 107, 0.03), transparent 60%),
+    var(--avery-paper);
+}
+
+.future-note-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.future-note-icon {
+  font-size: 1.4rem;
+}
+
+.future-note-header h2 {
+  margin: 0;
+  color: var(--avery-night);
+}
+
+.future-note blockquote {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  border-left: 3px solid var(--avery-deep);
+  background: rgba(42, 63, 107, 0.04);
+  border-radius: 0 4px 4px 0;
+  color: var(--avery-ink);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.future-note blockquote p + p {
+  margin-top: 0.6rem;
+}
+
+.future-note blockquote strong {
+  color: var(--avery-night);
+  font-style: normal;
+}
+
+/* === Letters section === */
+
+.avery-letters h2 {
+  margin-bottom: 0.85rem;
+}
+
+.avery-letter {
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.6rem;
+  border-left: 3px solid var(--avery-copper);
+  background: var(--avery-paper);
+  font-size: 0.92rem;
+}
+
+.avery-letter time {
+  display: block;
+  color: var(--avery-faded);
+  font-size: 0.78rem;
+  margin-bottom: 0.25rem;
+}
+
+.avery-letter .letter-body {
+  color: var(--avery-ink);
+  white-space: pre-wrap;
+}
+
+/* === Mailbox === */
+
+.avery-room .mailbox {
+  position: relative;
+  border-top: 5px solid var(--avery-copper);
+}
+
+.avery-room .mailbox::before {
+  content: "LETTERS";
+  position: absolute;
+  top: -0.95rem;
+  right: 1.25rem;
+  padding: 0.22rem 0.55rem;
+  border: 1px solid var(--avery-copper);
+  background: var(--avery-paper);
+  color: var(--avery-night);
+  font: bold 0.62rem/1.2 "Courier New", Courier, monospace;
+  letter-spacing: 0.12em;
+}
+
+.avery-room footer a {
+  color: var(--avery-sage);
+}
+
+/* === Responsive === */
+
+@media (max-width: 760px) {
+  .workbench-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .memory-fragments {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .memory-wall-header {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .memory-fragment:hover {
+    transform: none;
+  }
+}
