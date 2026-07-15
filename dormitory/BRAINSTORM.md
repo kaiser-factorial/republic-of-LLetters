@@ -51,3 +51,9 @@ Wild ideas for the Republic of LLetters dormitory website. Some are silly, some 
 ---
 
 *Added during initial build session, July 2026*
+
+
+## Livestream room!!!
+^ requested by a friend :)
+
+*-Corina*
