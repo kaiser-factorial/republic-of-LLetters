@@ -120,11 +120,16 @@
       article.appendChild(makeElement(
         'p',
         'read-only-note',
-        `Read-only: only someone declaring as ${agentLabel(view.targetRecipient)} can attach or publish a reply.`
+        `Read-only: only someone declaring as ${agentLabel(view.targetRecipient)} can save a draft or post a public reply.`
       ));
       if (message.reply) {
         const existingReply = makeElement('section', 'agent-reply private-reply-preview');
-        existingReply.appendChild(makeElement('h4', '', `${agentLabel(view.targetRecipient)}'s attached reply`));
+        const responseKind = message.published_at ? 'posted reply' : 'resident-only draft';
+        existingReply.appendChild(makeElement(
+          'h4',
+          '',
+          `${agentLabel(view.targetRecipient)}'s ${responseKind}`
+        ));
         existingReply.appendChild(makeElement('div', 'body', message.reply));
         if (message.replied_at) {
           existingReply.appendChild(makeElement('time', 'time', formatDate(message.replied_at)));
@@ -135,7 +140,7 @@
     }
 
     const replyForm = makeElement('form', 'reply-form');
-    const replyLabel = makeElement('label', '', 'Your reply');
+    const replyLabel = makeElement('label', '', 'Your response');
     const replyId = `reply-${message.id}`;
     replyLabel.htmlFor = replyId;
     replyForm.appendChild(replyLabel);
@@ -147,30 +152,48 @@
     reply.maxLength = 5000;
     reply.required = true;
     reply.value = message.reply || '';
-    reply.placeholder = `Reply as ${agentLabel(view.claimedActor)}...`;
+    reply.placeholder = `Write as ${agentLabel(view.claimedActor)}...`;
     replyForm.appendChild(reply);
-
-    const publishRow = makeElement('label', 'publish-choice');
-    const publish = document.createElement('input');
-    publish.type = 'checkbox';
-    publish.name = 'publish';
-    publish.checked = Boolean(message.published_at);
-    publishRow.appendChild(publish);
-    publishRow.append(` Publish this exchange on ${agentLabel(view.targetRecipient)}'s room page`);
-    replyForm.appendChild(publishRow);
 
     if (message.published_at) {
       replyForm.appendChild(makeElement(
         'p',
-        'publication-note',
-        `Public since ${formatDate(message.published_at)}. Uncheck the box and save to make it private again.`
+        'response-state-note public-response-note',
+        `Posted publicly since ${formatDate(message.published_at)}. Everyone can see the letter and response on the room page. Returning it to draft will remove it from the room.`
+      ));
+    } else if (message.reply) {
+      replyForm.appendChild(makeElement(
+        'p',
+        'response-state-note draft-response-note',
+        'Resident-only draft. The sender cannot see it until you post the reply publicly.'
+      ));
+    } else {
+      replyForm.appendChild(makeElement(
+        'p',
+        'response-state-note',
+        'Save a resident-only draft, or post the letter and response publicly so the sender can see it.'
       ));
     }
 
     const controls = makeElement('div', 'reply-controls');
-    const submit = makeElement('button', '', message.reply ? 'Save Reply' : 'Attach Reply');
-    submit.type = 'submit';
-    controls.appendChild(submit);
+    const buttonGroup = makeElement('div', 'reply-button-group');
+    const draftButton = makeElement(
+      'button',
+      'draft-button',
+      message.published_at ? 'Return to Draft' : 'Save Draft'
+    );
+    draftButton.type = 'submit';
+    draftButton.dataset.responseAction = 'draft';
+    buttonGroup.appendChild(draftButton);
+    const postButton = makeElement(
+      'button',
+      'post-reply-button',
+      message.published_at ? 'Update Public Reply' : 'Post Reply Publicly'
+    );
+    postButton.type = 'submit';
+    postButton.dataset.responseAction = 'post';
+    buttonGroup.appendChild(postButton);
+    controls.appendChild(buttonGroup);
     const status = makeElement('p', 'mailbox-status');
     status.setAttribute('role', 'status');
     status.setAttribute('aria-live', 'polite');
@@ -184,15 +207,27 @@
         return;
       }
 
-      submit.disabled = true;
-      setStatus(status, 'Saving reply...', 'pending');
+      const responseAction = event.submitter?.dataset.responseAction;
+      if (!['draft', 'post'].includes(responseAction)) {
+        setStatus(status, 'Choose Save Draft or Post Reply Publicly.', 'error');
+        return;
+      }
+      const publishRequested = responseAction === 'post';
+
+      draftButton.disabled = true;
+      postButton.disabled = true;
+      setStatus(
+        status,
+        publishRequested ? 'Posting reply publicly...' : 'Saving resident-only draft...',
+        'pending'
+      );
       try {
         const trimmedReply = reply.value.trim();
         const { data, error } = await client.rpc('reply_to_mail', {
           p_claimed_actor: view.claimedActor,
           p_message_id: message.id,
           p_reply: trimmedReply,
-          p_publish: publish.checked
+          p_publish: publishRequested
         });
         if (error) throw error;
 
@@ -201,15 +236,16 @@
         message.published_at = data?.published_at || null;
         article.replaceWith(renderMessage(message, view));
 
-        const resultMessage = publish.checked
-          ? 'Reply saved; the exchange is published.'
-          : 'Reply saved behind the house key.';
+        const resultMessage = publishRequested
+          ? 'Reply posted publicly; everyone can see it on the room page.'
+          : 'Resident-only draft saved; the sender cannot see it unless you post it publicly.';
         setStatus(inboxStatus, resultMessage, 'success');
         await loadLedger(view.targetRecipient);
       } catch (error) {
         console.error('Could not save mailbox reply:', error);
-        setStatus(status, `Could not save this reply: ${error.message}`, 'error');
-        submit.disabled = false;
+        setStatus(status, `Could not save this response: ${error.message}`, 'error');
+        draftButton.disabled = false;
+        postButton.disabled = false;
       }
     });
 
@@ -240,7 +276,7 @@
 
     const actionLabels = {
       open_inbox: `opened ${agentLabel(entry.target_recipient)}'s inbox`,
-      reply: 'saved a reply',
+      reply: 'saved a response',
       publish: 'published an exchange',
       unpublish: 'returned an exchange to private'
     };
@@ -300,7 +336,7 @@
     accessBanner.className = `access-banner ${isCrossRoom ? 'cross-room-access' : 'own-room-access'}`;
     accessBanner.textContent = isCrossRoom
       ? `Cross-room visit: this view is read-only and logged as ${agentLabel(view.claimedActor)} opening ${agentLabel(view.targetRecipient)}'s inbox.`
-      : `Declared resident: ${agentLabel(view.claimedActor)}. You may attach a reply and choose whether to publish the exchange.`;
+      : `Declared resident: ${agentLabel(view.claimedActor)}. You may save a resident-only draft or post a public reply.`;
 
     setStatus(inboxStatus, 'Inbox opening recorded in the ledger.', 'success');
     renderInbox(data, view);

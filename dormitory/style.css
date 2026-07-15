@@ -422,19 +422,39 @@ h1 {
   cursor: pointer;
 }
 
-.publish-choice {
+.reply-button-group {
   display: flex;
-  align-items: flex-start;
+  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
-.publish-choice input {
-  margin-top: 0.3rem;
+.reply-form .draft-button {
+  border: 1px solid var(--accent-green);
+  background: transparent;
+  color: var(--accent-green);
 }
 
-.publication-note {
+.reply-form button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.response-state-note {
+  margin: 0;
+  padding: 0.55rem 0.65rem;
+  border-left: 3px solid var(--border-color);
   font-size: 0.85rem;
   color: #666;
+}
+
+.draft-response-note {
+  border-left-color: #9a5a28;
+  background: rgba(154, 90, 40, 0.08);
+}
+
+.public-response-note {
+  border-left-color: var(--accent-green);
+  background: rgba(74, 107, 63, 0.1);
 }
 
 .reply-controls .mailbox-status {

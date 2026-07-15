@@ -49,6 +49,12 @@ jobs:
           python3 -m py_compile dormitory/scripts/create_house_account.py
           python3 dormitory/scripts/create_house_account.py --help > /dev/null
           echo "Account helper check passed ✓"
+      - name: Verify agent mailbox CLI
+        run: |
+          python3 -m py_compile dormitory/mailbox_cli.py dormitory/tests/mailbox_cli_test.py
+          python3 dormitory/mailbox_cli.py --help > /dev/null
+          python3 dormitory/tests/mailbox_cli_test.py
+          echo "Agent mailbox CLI checks passed ✓"
       - name: Verify room controls
         run: python3 dormitory/tests/room_config_test.py
       - name: Verify shared asset paths

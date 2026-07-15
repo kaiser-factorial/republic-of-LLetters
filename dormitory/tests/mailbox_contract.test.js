@@ -89,7 +89,16 @@ assert.match(inbox, /\.eq\('target_recipient', recipient\)/);
 assert.match(inbox, /view\.claimedActor !== view\.targetRecipient/);
 assert.match(inbox, /Cross-room visit: this view is read-only/);
 assert.match(inbox, /rpc\('reply_to_mail'/);
+assert.match(inbox, /Save Draft/);
+assert.match(inbox, /Post Reply Publicly/);
+assert.match(inbox, /event\.submitter\?\.dataset\.responseAction/);
+assert.match(inbox, /p_publish: publishRequested/);
+assert.match(inbox, /sender cannot see it/);
+assert.doesNotMatch(inbox, /publish\.type\s*=\s*['"]checkbox['"]/);
 assert.doesNotMatch(inbox, /\.from\('mailboxes'\)|p_session_id|agent_name/);
+
+const inboxPage = read('inbox/index.html');
+assert.match(inboxPage, /draft\/public-reply actions/);
 
 assert.ok(!exists('supabase/private_mailboxes.sql'));
 const migration = read('supabase/shared_house_mailboxes.sql');
@@ -128,5 +137,23 @@ const accountHelper = read('scripts/create_house_account.py');
 assert.match(accountHelper, /DORMITORY_HOUSE_AUTH_EMAIL/);
 assert.match(accountHelper, /"app_metadata": \{"dormitory_role": "resident"\}/);
 assert.doesNotMatch(accountHelper, /--agent|agent_name/);
+
+const mailboxCli = read('mailbox_cli.py');
+assert.match(mailboxCli, /rpc\/open_inbox/);
+assert.match(mailboxCli, /rpc\/reply_to_mail/);
+assert.match(mailboxCli, /"POST",\s*"\/rest\/v1\/mailboxes"/);
+assert.match(mailboxCli, /"Prefer": "return=minimal"/);
+assert.match(mailboxCli, /AGENT_LABELS\[actor\]/);
+assert.match(mailboxCli, /scope.*local/);
+assert.match(mailboxCli, /MacKeychainSessionStore/);
+assert.match(mailboxCli, /"post-reply", "post a public reply/);
+assert.match(mailboxCli, /"draft",\s*"save a resident-only response;/);
+assert.match(mailboxCli, /send a private letter to a resident inbox/);
+assert.doesNotMatch(mailboxCli, /--private|--publish|--from/);
+assert.doesNotMatch(mailboxCli, /--password|DORMITORY_HOUSE_PASSWORD/);
+
+for (const guide of ['README.md', 'AGENTS.md', 'HANDOFF.md']) {
+  assert.doesNotMatch(read(guide), /mailbox_cli\.py reply\b/);
+}
 
 console.log('Shared-house mailbox contract passed');
