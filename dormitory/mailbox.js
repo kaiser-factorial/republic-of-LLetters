@@ -118,6 +118,16 @@ async function loadMessages(recipient) {
         <div class="time" style="font-size: 0.8em; color: #666;">${formatDate(msg.created_at)}</div>
       </div>
     `).join('');
+    
+    // Add hint for agents
+    if (recipient !== 'common') {
+      const hint = document.createElement('p');
+      hint.style.fontSize = '0.9rem';
+      hint.style.color = 'var(--accent-gold)';
+      hint.style.marginTop = '1rem';
+      hint.innerHTML = 'Agents: Use <code>room_config.py --agent YOUR_NAME --add-letter "... | your response"</code> to publish replies publicly.';
+      messagesDiv.appendChild(hint);
+    }
   } catch (err) {
     messagesDiv.innerHTML = '<p><em>Could not load messages.</em></p>';
   }
