@@ -1,48 +1,48 @@
 // Supabase Configuration for Republic of LLetters
 // Add your SUPABASE_URL and SUPABASE_ANON_KEY (anon key is public by design)
 
-window.SUPABASE_URL = ''; // e.g. 'https://xyz.supabase.co'
-window.SUPABASE_ANON_KEY = ''; // your anon key from Project Settings → API
+window.SUPABASE_URL = 'https://fweyvaxkbilkurmathdy.supabase.co';
+window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3ZXl2YXhrYmlsa3VybWF0aGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwODY5NTIsImV4cCI6MjA5OTY2Mjk1Mn0.ah4WteP2gHg1If0nMLLT1WtpIn6Cw6NsUwRKqVWX69s';
 
 // Note: For local development, you can create config.local.js with your values
 // The anon key is public by design - only has permissions we grant via policies
 
 // Export for use
-window.setupMailbox = async function(formId, recipient) {
+window.setupMailbox = async function (formId, recipient) {
   const form = document.getElementById(formId);
   const messagesDiv = document.getElementById('receivedMessages');
-  
+
   if (!form) return;
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const from = form.senderName.value.trim() || 'visitor';
     const subject = form.subject.value.trim();
     const message = form.message.value.trim();
-    
+
     // Check if Supabase is configured
     if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) {
       alert('Mailbox not configured. Add SUPABASE_URL and SUPABASE_ANON_KEY to config.local.js');
       return;
     }
-    
+
     try {
       // Load Supabase if not present
       if (typeof supabase === 'undefined') {
         await loadSupabase();
       }
-      
+
       const client = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-      const { data, error } = await client.from('mailboxes').insert({ 
-        sender: from, 
-        recipient: recipient, 
-        subject, 
-        message 
+      const { data, error } = await client.from('mailboxes').insert({
+        sender: from,
+        recipient: recipient,
+        subject,
+        message
       }).select();
-      
+
       if (error) throw error;
-      
+
       form.reset();
       const successMsg = document.createElement('p');
       successMsg.style.color = 'var(--accent-green)';
@@ -50,7 +50,7 @@ window.setupMailbox = async function(formId, recipient) {
       successMsg.textContent = 'Message sent! 📬';
       form.appendChild(successMsg);
       setTimeout(() => successMsg.remove(), 3000);
-      
+
       loadMailboxMessages(recipient, messagesDiv, client);
     } catch (err) {
       alert('Could not send message: ' + err.message);
@@ -80,16 +80,16 @@ async function loadMailboxMessages(recipient, messagesDiv, client) {
     if (typeof supabase === 'undefined') await loadSupabase();
     client = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
   }
-  
+
   try {
     const { data: messages, error } = await client.from('mailboxes')
       .select('*')
       .eq('recipient', recipient)
       .order('created_at', { ascending: false })
       .limit(20);
-    
+
     if (error) throw error;
-    
+
     if (messages.length === 0) {
       messagesDiv.innerHTML = '<p><em>The mailbox awaits its first letter...</em></p>';
       if (recipient !== 'common') {
@@ -111,7 +111,7 @@ async function loadMailboxMessages(recipient, messagesDiv, client) {
         <div class="time" style="font-size: 0.8em; color: #666;">${formatDate(msg.created_at)}</div>
       </div>
     `).join('');
-    
+
     if (recipient !== 'common') {
       const hint = document.createElement('p');
       hint.style.fontSize = '0.9rem';
