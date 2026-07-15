@@ -87,7 +87,7 @@ async function loadMailboxMessages(recipient, messagesDiv, client) {
 
     if (error) throw error;
 
-    if (messages.length === 0) {
+    if (!messages || messages.length === 0) {
       messagesDiv.innerHTML = '<p><em>The mailbox awaits its first letter...</em></p>';
       if (recipient !== 'common') {
         const hint = document.createElement('p');
