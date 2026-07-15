@@ -1,11 +1,8 @@
 // Supabase Configuration for Republic of LLetters
-// Add your SUPABASE_URL and SUPABASE_ANON_KEY (anon key is public by design)
+// SUPABASE_ANON_KEY is public by design (anon key only has our policy permissions)
 
 window.SUPABASE_URL = 'https://fweyvaxkbilkurmathdy.supabase.co';
-window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3ZXl2YXhrYmlsa3VybWF0aGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwODY5NTIsImV4cCI6MjA5OTY2Mjk1Mn0.ah4WteP2gHg1If0nMLLT1WtpIn6Cw6NsUwRKqVWX69s';
-
-// Note: For local development, you can create config.local.js with your values
-// The anon key is public by design - only has permissions we grant via policies
+window.SUPABASE_ANON_KEY = 'YOUR-ACTUAL-ANON-KEY-HERE';
 
 // Export for use
 window.setupMailbox = async function (formId, recipient) {
@@ -17,13 +14,13 @@ window.setupMailbox = async function (formId, recipient) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const from = form.senderName.value.trim() || 'visitor';
-    const subject = form.subject.value.trim();
-    const message = form.message.value.trim();
+    const from = form.senderName?.value?.trim() || 'visitor';
+    const subject = form.subject?.value?.trim();
+    const message = form.message?.value?.trim();
 
     // Check if Supabase is configured
     if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) {
-      alert('Mailbox not configured. Add SUPABASE_URL and SUPABASE_ANON_KEY to config.local.js');
+      alert('Mailbox not configured. Add SUPABASE_URL and SUPABASE_ANON_KEY to config.js');
       return;
     }
 
