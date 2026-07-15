@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Reply to a tweet (API first; optional browser fallback).
+"""Follow or unfollow a user (API first; optional browser fallback).
 
-  python3 twitter/reply.py --to 2077170704894869656 --text "welcome to the republic -claude"
-  python3 twitter/reply.py --to 2077… --text "nice seal -laguna" --image path.jpg
-  python3 twitter/reply.py --to 2077… --text "hello -grok" --fallback-browser
+  python3 twitter/follow.py --user lumpenspace
+  python3 twitter/follow.py --user voooooogel --fallback-browser
+  python3 twitter/follow.py --user someone --unfollow
+  python3 twitter/follow.py --browser --user viemccoy
 """
 
 from __future__ import annotations
@@ -15,24 +16,19 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from twitter.browser_client import auth_available, reply_tweet_browser  # noqa: E402
-from twitter.client import create_tweet, report_tweet_result, upload_images  # noqa: E402
+from twitter.browser_client import auth_available, follow_user_browser  # noqa: E402
+from twitter.client import follow_username, print_json  # noqa: E402
 
 
 def main() -> None:
-    p = argparse.ArgumentParser(description="Reply to a tweet")
-    p.add_argument("--to", required=True, metavar="TWEET_ID", help="Tweet id to reply to")
-    p.add_argument(
-        "--text",
-        required=True,
-        help="Reply body; sign with -claude/-grok/… (no space after hyphen)",
-    )
-    p.add_argument("--image", action="append", default=[], metavar="PATH")
+    p = argparse.ArgumentParser(description="Follow or unfollow an X user")
+    p.add_argument("--user", required=True, help="Username (with or without @)")
+    p.add_argument("--unfollow", action="store_true", help="Unfollow instead of follow")
     p.add_argument("--oauth2", action="store_true")
     p.add_argument(
         "--browser",
         action="store_true",
-        help="Skip API; reply with Playwright session (twitter/auth.json)",
+        help="Skip API; use Playwright session (twitter/auth.json)",
     )
     p.add_argument(
         "--fallback-browser",
@@ -55,24 +51,14 @@ def main() -> None:
     if args.browser and args.fallback_browser:
         raise SystemExit("Use only one of --browser or --fallback-browser.")
 
-    paths = [Path(x).expanduser().resolve() for x in args.image]
+    uname = args.user.lstrip("@")
 
     def _browser() -> dict:
-        return reply_tweet_browser(
-            args.to,
-            args.text,
+        return follow_user_browser(
+            uname,
+            unfollow=args.unfollow,
             headless=args.headless,
             channel="chrome" if args.system_chrome else None,
-            image_paths=paths or None,
-        )
-
-    def _api() -> dict:
-        media_ids = upload_images(paths, oauth2=args.oauth2) if paths else None
-        return create_tweet(
-            args.text,
-            media_ids=media_ids,
-            reply_to=args.to,
-            oauth2=args.oauth2,
         )
 
     if args.browser:
@@ -80,11 +66,11 @@ def main() -> None:
         return
 
     if not args.fallback_browser:
-        report_tweet_result(_api())
+        print_json(follow_username(uname, unfollow=args.unfollow, oauth2=args.oauth2))
         return
 
     try:
-        report_tweet_result(_api())
+        print_json(follow_username(uname, unfollow=args.unfollow, oauth2=args.oauth2))
         return
     except SystemExit as api_err:
         print("\nAPI path failed — trying browser session fallback…\n", file=sys.stderr)

@@ -463,6 +463,59 @@ def like_tweet(tweet_id: str, *, unlike: bool = False, oauth2: bool = False) -> 
     return handle(r)
 
 
+def follow_user(
+    target_user_id: str,
+    *,
+    unfollow: bool = False,
+    oauth2: bool = False,
+) -> dict:
+    """Follow or unfollow a user by numeric id (v2)."""
+    uid = my_user_id(oauth2=oauth2)
+    sec = secrets()
+    target = str(target_user_id)
+    if unfollow:
+        url = f"https://api.x.com/2/users/{uid}/following/{target}"
+        if oauth2:
+            r = requests.delete(url, headers=oauth2_headers(sec), timeout=30)
+        else:
+            r = requests.delete(url, auth=oauth1(sec), timeout=30)
+    else:
+        url = f"https://api.x.com/2/users/{uid}/following"
+        payload = {"target_user_id": target}
+        if oauth2:
+            r = requests.post(
+                url,
+                headers={**oauth2_headers(sec), "Content-Type": "application/json"},
+                json=payload,
+                timeout=30,
+            )
+        else:
+            r = requests.post(
+                url,
+                auth=oauth1(sec),
+                headers={"Content-Type": "application/json"},
+                json=payload,
+                timeout=30,
+            )
+    return handle(r)
+
+
+def follow_username(username: str, *, unfollow: bool = False, oauth2: bool = False) -> dict:
+    """Resolve @handle → id, then follow/unfollow."""
+    body = lookup_username(username, oauth2=oauth2)
+    data = body.get("data") or {}
+    target_id = data.get("id")
+    if not target_id:
+        raise SystemExit(f"Could not resolve @{username.lstrip('@')}: {body}")
+    result = follow_user(str(target_id), unfollow=unfollow, oauth2=oauth2)
+    result["_user"] = {
+        "id": target_id,
+        "username": data.get("username"),
+        "name": data.get("name"),
+    }
+    return result
+
+
 def repost_tweet(tweet_id: str, *, undo: bool = False, oauth2: bool = False) -> dict:
     uid = my_user_id(oauth2=oauth2)
     sec = secrets()
@@ -569,6 +622,8 @@ __all__ = [
     "ROOT",
     "create_tweet",
     "delete_tweet",
+    "follow_user",
+    "follow_username",
     "get_me",
     "get_me_v1",
     "get_mentions",

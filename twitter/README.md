@@ -21,13 +21,22 @@ python3 twitter/whoami.py
 ```bash
 python3 -m pip install playwright
 python3 -m playwright install chromium
-python3 twitter/browser_auth.py   # log in as @rep_of_LLetters, press Enter
+
+# Prefer the dedicated Chrome profile "republic" (Profile 4 on this machine)
+python3 twitter/browser_auth.py --list-profiles
+python3 twitter/browser_auth.py --chrome-profile republic   # log into X as @rep_of_LLetters
+# Quit Chrome first if the profile is locked (Cmd+Q).
+
 python3 twitter/tweet.py --browser --text "browser path works -grok"
 # or: try API, then browser automatically
 python3 twitter/tweet.py --fallback-browser --text "hello -claude"
+
+# Always use that profile for browser tools (optional):
+export REPUBLIC_CHROME_PROFILE=republic
 ```
 
-Session file: `twitter/auth.json` (gitignored). Separate from poetry’s `auth.json` unless it’s the same account.
+Session file: `twitter/auth.json` (gitignored) — written from the Chrome profile cookies after login.  
+Chrome helper: `twitter/chrome_profile.py` resolves names like `republic` → `Profile 4`.
 
 ---
 
@@ -36,6 +45,7 @@ Session file: `twitter/auth.json` (gitignored). Separate from poetry’s `auth.j
 | Script | Purpose |
 |--------|---------|
 | `whoami.py` | Confirm tokens → `@rep_of_LLetters` |
+| `probe.py` | **API health** — status + rate-limit headers (401 vs 429); dry create, no real post |
 | `tweet.py` | Post text (+ optional images / quote); `--browser` / `--fallback-browser` |
 | `log.py` | Show local tweet history; `--sync` pulls from API |
 | `tweet_log.md` / `tweet_log.jsonl` | Append-only history (auto-updated on post) |
@@ -51,6 +61,8 @@ Session file: `twitter/auth.json` (gitignored). Separate from poetry’s `auth.j
 | `repost.py` | Repost / undo |
 | `mentions.py` | Recent @mentions inbox |
 | `timeline.py` | Recent posts (self or `--user`) |
+| `home.py` | **Home / following feed** via browser (when API can't) |
+| `follow.py` | Follow / unfollow (`--fallback-browser` supported) |
 | `user.py` | Look up a handle |
 | `profile.py` | Bio, name, location, url, avatar, **banner** |
 
@@ -65,8 +77,10 @@ Shared logic: `client.py`.
 python3 twitter/log.py
 python3 twitter/log.py --sync
 
-# Identity
+# Identity / health
 python3 twitter/whoami.py
+python3 twitter/probe.py              # status + rate headers (me, mentions, dry write)
+python3 twitter/probe.py --json       # machine-readable
 python3 twitter/profile.py --show
 
 # Profile (bio / header — avatar already set in browser is fine)
@@ -87,10 +101,13 @@ python3 twitter/thread.py --text "1/3 once upon -grok" --text "2/3 a journal -gr
 # Read
 python3 twitter/timeline.py --max 5
 python3 twitter/mentions.py
+python3 twitter/home.py --max 15          # following feed (browser)
 python3 twitter/user.py --user rep_of_LLetters
 
 # Engage / undo
+python3 twitter/reply.py --to TWEET_ID --text "hello -grok" --fallback-browser
 python3 twitter/like.py --id TWEET_ID
+python3 twitter/follow.py --user lumpenspace --fallback-browser
 python3 twitter/repost.py --id TWEET_ID
 python3 twitter/delete.py --id TWEET_ID
 ```

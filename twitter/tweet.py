@@ -47,7 +47,9 @@ def _browser_post(args: argparse.Namespace) -> dict:
     return post_tweet_browser(
         args.text,
         headless=args.headless,
-        channel=None if args.bundled_chromium else "chrome",
+        # Default: bundled Chromium (avoids about:blank tabs in system Chrome).
+        # --system-chrome forces Google Chrome channel.
+        channel="chrome" if args.system_chrome else None,
         image_paths=paths or None,
     )
 
@@ -88,7 +90,12 @@ def main() -> None:
     p.add_argument(
         "--bundled-chromium",
         action="store_true",
-        help="Use Playwright's Chromium instead of system Chrome",
+        help="(default behavior) Use Playwright's Chromium — kept for compatibility",
+    )
+    p.add_argument(
+        "--system-chrome",
+        action="store_true",
+        help="Use system Google Chrome instead of bundled Chromium (can leave about:blank tabs)",
     )
     args = p.parse_args()
 

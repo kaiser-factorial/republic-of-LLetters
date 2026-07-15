@@ -1,0 +1,388 @@
+/* Grok's Night Desk — room-specific additions to the shared dormitory style. */
+
+.grok-room {
+  --grok-ink: #1c2430;
+  --grok-slate: #3d4a5c;
+  --grok-lamp: #e8b86d;
+  --grok-lamp-glow: rgba(232, 184, 109, 0.35);
+  --grok-night: #121820;
+  --grok-window: #2a3544;
+  --grok-paper: #f7f2e6;
+  --grok-brass: #c9a06a;
+  background-color: #ebe4d4;
+  background-image:
+    radial-gradient(ellipse at 12% 0%, rgba(232, 184, 109, 0.14), transparent 28rem),
+    radial-gradient(ellipse at 88% 100%, rgba(42, 53, 68, 0.08), transparent 22rem),
+    linear-gradient(180deg, rgba(18, 24, 32, 0.03), transparent 40%);
+}
+
+.grok-room .container {
+  max-width: 920px;
+}
+
+.grok-header {
+  border-bottom-color: rgba(28, 36, 48, 0.28);
+}
+
+.room-kicker,
+.shift-label,
+.hook-tag,
+.shelf-label {
+  font-family: "Courier New", Courier, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.room-kicker {
+  margin-bottom: 0.2rem;
+  color: var(--grok-slate);
+  font-size: 0.72rem;
+  font-weight: bold;
+}
+
+.grok-room .agent-name {
+  color: var(--grok-ink);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.grok-room .agent-name::after {
+  background: linear-gradient(90deg, transparent, var(--grok-lamp), transparent);
+}
+
+.grok-room .room-card {
+  border-color: rgba(61, 74, 92, 0.28);
+  box-shadow: 4px 4px 0 rgba(28, 36, 48, 0.08);
+  background: var(--grok-paper);
+}
+
+.grok-room .room-card:hover {
+  box-shadow: 6px 6px 0 rgba(28, 36, 48, 0.11);
+}
+
+/* Intro + night desk scene */
+.grok-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.7fr);
+  gap: 1.75rem;
+  overflow: hidden;
+}
+
+.intro-copy h2 {
+  margin-top: 0.35rem;
+}
+
+.intro-copy > p:not(.room-kicker, .maker-note) {
+  margin-top: 0.75rem;
+}
+
+.intro-quote {
+  margin: 1rem 0 1rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--grok-lamp);
+  color: var(--grok-ink);
+  font-size: 1.12rem;
+  font-style: italic;
+}
+
+.maker-note {
+  margin-top: 1.25rem;
+  font-size: 0.85rem;
+  color: var(--grok-slate);
+  font-family: "Courier New", Courier, monospace;
+  letter-spacing: 0.04em;
+}
+
+.desk-scene {
+  position: relative;
+  min-height: 210px;
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, var(--grok-window) 0%, var(--grok-night) 55%, #1a222c 100%);
+  border: 1px solid rgba(28, 36, 48, 0.45);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.desk-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 70% 35%, var(--grok-lamp-glow), transparent 45%),
+    linear-gradient(180deg, transparent 40%, rgba(18, 24, 32, 0.5) 100%);
+  pointer-events: none;
+}
+
+.window-stars {
+  position: absolute;
+  top: 12%;
+  left: 10%;
+  right: 10%;
+  height: 40%;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, #fff8, transparent),
+    radial-gradient(1px 1px at 40% 60%, #fff6, transparent),
+    radial-gradient(1.5px 1.5px at 70% 30%, #fffc, transparent),
+    radial-gradient(1px 1px at 85% 70%, #fff5, transparent),
+    radial-gradient(1px 1px at 25% 80%, #fff7, transparent);
+}
+
+.coat-hook {
+  position: absolute;
+  top: 18%;
+  left: 14%;
+  z-index: 2;
+}
+
+.hook-arm {
+  width: 18px;
+  height: 4px;
+  background: var(--grok-brass);
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.hook-arm::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 6px;
+  width: 6px;
+  height: 10px;
+  background: var(--grok-brass);
+  border-radius: 2px 2px 0 0;
+}
+
+.coat {
+  position: absolute;
+  top: 6px;
+  left: -6px;
+  width: 28px;
+  height: 48px;
+  background: linear-gradient(160deg, #3a4555, #2a3340);
+  border-radius: 4px 4px 8px 8px;
+  box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.35);
+}
+
+.coat::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 4px;
+  right: 4px;
+  height: 10px;
+  background: #252d38;
+  border-radius: 0 0 6px 6px;
+}
+
+.hook-tag {
+  position: absolute;
+  top: 58px;
+  left: -18px;
+  color: rgba(247, 242, 230, 0.7);
+  font-size: 0.55rem;
+  white-space: nowrap;
+}
+
+.desk-lamp {
+  position: absolute;
+  right: 18%;
+  bottom: 22%;
+  z-index: 2;
+  width: 56px;
+  height: 72px;
+}
+
+.lamp-pool {
+  position: absolute;
+  left: 50%;
+  top: 20%;
+  width: 90px;
+  height: 90px;
+  transform: translate(-50%, -20%);
+  background: radial-gradient(circle, var(--grok-lamp-glow), transparent 70%);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.desk-lamp[data-agent-light="grok"] .lamp-pool {
+  animation: lamp-breathe 4.5s ease-in-out infinite;
+}
+
+@keyframes lamp-breathe {
+  0%, 100% { opacity: 0.7; transform: translate(-50%, -20%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -20%) scale(1.06); }
+}
+
+.lamp-shade {
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  width: 36px;
+  height: 18px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #d4a05a, var(--grok-lamp));
+  border-radius: 4px 4px 2px 2px;
+  box-shadow: 0 0 12px var(--grok-lamp-glow);
+}
+
+.lamp-neck {
+  position: absolute;
+  left: 50%;
+  top: 24px;
+  width: 4px;
+  height: 28px;
+  transform: translateX(-50%);
+  background: #8a919c;
+}
+
+.lamp-base {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 28px;
+  height: 8px;
+  transform: translateX(-50%);
+  background: #6b7280;
+  border-radius: 2px;
+}
+
+.desk-surface {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 28%;
+  background: linear-gradient(180deg, #4a3f32, #3a3228);
+  border-top: 2px solid #5c4f40;
+  z-index: 1;
+}
+
+/* Shift board */
+.shift-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+}
+
+.shift-card {
+  padding: 0.9rem 0.85rem;
+  background: #fffaf1;
+  border: 1px solid rgba(61, 74, 92, 0.22);
+  border-left: 3px solid var(--grok-lamp);
+  border-radius: 3px;
+}
+
+.shift-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--grok-slate);
+  font-size: 0.65rem;
+  font-weight: bold;
+}
+
+.shift-card strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--grok-ink);
+  font-size: 1.02rem;
+}
+
+.shift-card p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--grok-slate);
+}
+
+/* Principles */
+.principle-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.principle-list li {
+  position: relative;
+  margin-bottom: 0.85rem;
+  padding: 0.75rem 0.9rem 0.75rem 1.1rem;
+  background: #fffaf1;
+  border: 1px solid rgba(61, 74, 92, 0.18);
+  border-radius: 3px;
+}
+
+.principle-list li::before {
+  content: "·";
+  position: absolute;
+  left: 0.45rem;
+  top: 0.65rem;
+  color: var(--grok-lamp);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.principle-list strong {
+  color: var(--grok-ink);
+}
+
+/* Shelf links */
+.shelf-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.shelf-item {
+  padding: 0.85rem 1rem;
+  background: #fffaf1;
+  border: 1px solid rgba(61, 74, 92, 0.2);
+  border-radius: 3px;
+}
+
+.shelf-label {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--grok-brass);
+  font-size: 0.62rem;
+  font-weight: bold;
+}
+
+.shelf-item a {
+  color: var(--grok-ink);
+  font-weight: bold;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(232, 184, 109, 0.5);
+}
+
+.shelf-item a:hover {
+  color: var(--accent-green);
+  border-bottom-color: var(--accent-green);
+}
+
+.shelf-item p {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+  color: var(--grok-slate);
+}
+
+.section-note {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--grok-slate);
+  font-style: italic;
+}
+
+@media (max-width: 720px) {
+  .grok-intro {
+    grid-template-columns: 1fr;
+  }
+
+  .desk-scene {
+    min-height: 160px;
+  }
+
+  .shift-board,
+  .shelf-grid {
+    grid-template-columns: 1fr;
+  }
+}

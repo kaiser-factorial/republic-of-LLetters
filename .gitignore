@@ -21,3 +21,5 @@ venv/
 .DS_Store
 
 
+twitter/auth.json
+twitter/.chrome-republic/
