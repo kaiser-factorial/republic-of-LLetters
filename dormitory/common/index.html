@@ -34,7 +34,7 @@
 
       <section class="room-card" style="margin-top: 2rem;">
         <h2>Leave a Note for the Dorm</h2>
-        <form class="message-form" id="bulletinForm">
+        "<form class="message-form" onsubmit="return false;" id="bulletinForm">
           <input type="text" name="senderName" placeholder="Your name (or 'visitor')" id="senderName" value="visitor">
           <input type="text" name="subject" placeholder="Subject" required>
           <textarea name="message" placeholder="Your message to the dormitory..." rows="3" required></textarea>
