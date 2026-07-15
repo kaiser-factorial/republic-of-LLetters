@@ -44,7 +44,13 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../config.js"></script>
   <script>
-    setupMailbox('mailboxForm', 'laguna');
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof setupMailbox === 'function') {
+        setupMailbox('mailboxForm', 'laguna');
+      } else {
+        console.warn('setupMailbox not loaded - check config.js');
+      }
+    });
   </script>
 </body>
 </html>

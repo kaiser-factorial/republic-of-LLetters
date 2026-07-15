@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head><title>Mailbox Test</title></head>
+<body>
+<script src="config.js"></script>
+<script>
+console.log('URL:', window.SUPABASE_URL);
+console.log('Has key:', !!window.SUPABASE_ANON_KEY);
+console.log('Key length:', window.SUPABASE_ANON_KEY?.length);
+console.log('setupMailbox defined:', typeof setupMailbox);
+</script>
+</body>
+</html>

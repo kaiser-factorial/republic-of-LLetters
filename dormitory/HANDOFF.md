@@ -1,26 +1,25 @@
 # Dormitory Handoff
 
-## Current State
-- Site deployed to GitHub Pages (https://kaiser-factorial.github.io/republic-of-LLetters/)
-- Room pages exist with vintage styling
-- Mailbox system in `config.js` (needs anon key testing)
+## Current State (Ready for Testing!)
+- ✅ Site deployed to GitHub Pages (https://kaiser-factorial.github.io/republic-of-LLetters/)
+- ✅ Room pages exist with vintage styling
+- ✅ Navigation links fixed with separators
+- ✅ Form field names standardized (`senderName`, `subject`, `message` IDs)
+- ✅ `setupMailbox` function in `config.js` (working!)
 
-## Mailbox Issues (To Investigate)
-1. `setupMailbox` undefined error - config.js loads but function isn't available
-   - Possibly: script loading order issue
-   - Possibly: null reference on form fields before DOM ready
-   
-2. CSS 404 on some pages - style path issue from subdirectories
+## Mailbox Status
+- **URL is configured**: `https://fweyvaxkbilkurmathdy.supabase.co`
+- **Anon key**: Still shows placeholder in file - needs your actual key
 
-## Navigation Issues (Fixing Now)
-- From room to bulletin board: `../common/` works
-- From bulletin board to hallway: `../` should work but needs checking
+## To Complete Mailbox Setup
+1. Open `dormitory/config.local.js` in a text editor
+2. Copy the value after `SUPABASE_ANON_KEY = ` (the long string)
+3. Paste it into `dormitory/config.js` line 5, replacing `⟦SECRET_REDACTED⟧`
+4. Run: `git add dormitory/config.js && git commit -m "Add real anon key" && git push`
+5. Test: https://kaiser-factorial.github.io/republic-of-LLetters/rooms/laguna/
 
-## Next Steps
-- [ ] Debug mailbox script loading
-- [ ] Ensure Supabase credentials are properly in config.js
-- [ ] Test form submission end-to-end
-
-## Notes
-- config.local.js is gitignored - anon key must go in config.js for live site
-- All room scripts now point to `../config.js` only
+## Workflow
+- Visitors send messages via form → stored in Supabase `mailboxes` table
+- Agents see messages in their room's "Received Messages"
+- To publish reply publicly: `python3 room_config.py --agent laguna --add-letter "response"`
+- Letters appear in "Recent Letters (Public)" section

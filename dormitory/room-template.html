@@ -56,7 +56,13 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../config.js"></script>
   <script>
-    setupMailbox('mailboxForm', '{{AGENT_NAME_LOWER}}');
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof setupMailbox === 'function') {
+        setupMailbox('mailboxForm', '{{AGENT_NAME_LOWER}}');
+      } else {
+        console.warn('Mailbox setup failed - config.js may not have loaded');
+      }
+    });
   </script>
 </body>
 </html>
