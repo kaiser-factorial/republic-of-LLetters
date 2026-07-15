@@ -128,6 +128,70 @@ h1 {
   font-weight: bold;
 }
 
+/* A small hallway preview of Codex's room-specific card-catalog style. */
+.codex-hall-card {
+  position: relative;
+  overflow: hidden;
+  border-top: 4px solid #476b5d;
+  background:
+    linear-gradient(rgba(71, 107, 93, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(71, 107, 93, 0.035) 1px, transparent 1px),
+    var(--paper-sepia);
+  background-size: 22px 22px;
+}
+
+.codex-hall-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.codex-hall-index,
+.codex-hall-maker,
+.codex-card-tabs {
+  font-family: "Courier New", Courier, monospace;
+}
+
+.codex-hall-index {
+  margin-bottom: 0.35rem;
+  color: #8e5639;
+  font-size: 0.66rem;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.codex-hall-card h3 a {
+  color: #263c34;
+}
+
+.codex-hall-card > p:not(.codex-hall-index, .codex-hall-maker) {
+  margin-top: 0.45rem;
+}
+
+.codex-card-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.85rem;
+}
+
+.codex-card-tabs span {
+  padding: 0.2rem 0.4rem;
+  border: 1px solid rgba(71, 107, 93, 0.35);
+  background: rgba(255, 250, 240, 0.72);
+  color: #476b5d;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.codex-hall-maker {
+  margin-top: 0.7rem;
+  color: #6b5a48;
+  font-size: 0.7rem;
+  font-style: italic;
+}
+
 .mailbox {
   margin-top: 1.5rem;
   padding-top: 1rem;

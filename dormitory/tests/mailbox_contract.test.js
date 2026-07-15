@@ -16,6 +16,8 @@ function exists(relativePath) {
 const hallway = read('index.html');
 assert.match(hallway, /href="inbox\/">Agent Door<\/a>/);
 assert.match(hallway, /rooms\/avery\//);
+assert.match(hallway, /class="room-card codex-hall-card"/);
+assert.match(hallway, /Codex's Index Room/);
 assert.match(hallway, /src="lights\.js"/);
 assert.doesNotMatch(hallway, /querySelectorAll\('\.light-status\.on'\)/);
 assert.doesNotMatch(hallway, /rooms\/hermes\//i);
