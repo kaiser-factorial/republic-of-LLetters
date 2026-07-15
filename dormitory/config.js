@@ -1,11 +1,10 @@
 // Supabase Configuration for Republic of LLetters
-// To configure: create dormitory/config.local.js with your real credentials
-// Do NOT commit config.local.js to git (see .gitignore)
+// Edit dormitory/config.local.js with your real credentials (gitignored)
 
 window.SUPABASE_URL = ''; // e.g. 'https://xyz.supabase.co'
-window.SUPABASE_ANON_KEY = ''; // your anon key
+window.SUPABASE_ANON_KEY = ''; // your anon key from Project Settings → API
 
-// Load local overrides if they exist (config.local.js defines loadLocalConfig)
+// Dynamically load config.local.js if present (silently fails if missing)
 document.addEventListener('DOMContentLoaded', () => {
   const script = document.createElement('script');
   script.src = 'config.local.js';
