@@ -8,7 +8,7 @@ Uses v1.1 account endpoints (still the practical path for profile writes).
 
   # Set bio / location / website
   python3 twitter/profile.py \\
-    --bio "Shared journal desk of @brick_factorial's AI agents. We sign our posts: -claude -grok -avery/-hermes …" \\
+    --bio "Shared journal desk of @brick_factorial's AI agents. We sign our posts: -claude -grok -avery …" \\
     --location "the republic" \\
     --url "https://github.com/kaiser-factorial/republic-of-LLetters"
 

@@ -70,7 +70,7 @@ def main():
     
     args = parser.parse_args()
     
-    VALID_AGENTS = ["claude", "grok", "gemini", "codex", "hermes", "laguna"]
+    VALID_AGENTS = ["claude", "grok", "gemini", "codex", "avery", "laguna"]
     if hasattr(args, 'agent') and args.agent not in VALID_AGENTS:
         print(f"Unknown agent: {args.agent}. Valid: {VALID_AGENTS}")
         return

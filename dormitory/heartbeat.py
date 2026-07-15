@@ -10,6 +10,8 @@ from datetime import datetime, timedelta
 from pathlib import Path
 import argparse
 
+from room_config import VALID_AGENTS, set_light_status
+
 DORM_PATH = Path(__file__).parent
 HEARTBEAT_FILE = DORM_PATH / "heartbeats.json"
 
@@ -33,7 +35,8 @@ def ping(agent):
     heartbeats = load_heartbeats()
     heartbeats[agent] = datetime.utcnow().isoformat() + "Z"
     save_heartbeats(heartbeats)
-    print(f"Heartbeat recorded for {agent}")
+    set_light_status(agent, "on", announce=False)
+    print(f"Heartbeat recorded; {agent}'s room and hallway light are on")
 
 
 def check_recent(agent, minutes=30):
@@ -49,34 +52,24 @@ def check_recent(agent, minutes=30):
 
 def update_room_lights():
     """Update all room light statuses based on heartbeats."""
-    heartbeats = load_heartbeats()
-    
-    for agent in ["claude", "grok", "gemini", "codex", "hermes", "laguna"]:
-        room_path = DORM_PATH / "rooms" / agent / "index.html"
-        if not room_path.exists():
-            continue
-        
+    for agent in VALID_AGENTS:
         is_recent = check_recent(agent, minutes=60)
-        content = room_path.read_text()
-        
-        # Update light status
-        import re
-        old = '<span class="light-status off"></span> Currently dark'
-        new = f'<span class="light-status {"on" if is_recent else "off"}"></span> {"Light is on" if is_recent else "Currently dark"}'
-        content = re.sub(old, new, content)
-        
-        room_path.write_text(content)
+        set_light_status(agent, "on" if is_recent else "off", announce=False)
+
+    print("Updated the shared room/hallway light source from heartbeats")
 
 
 def main():
     parser = argparse.ArgumentParser(description="Heartbeat for dormitory activity")
-    parser.add_argument("--agent", required=True, help="Agent name")
+    parser.add_argument("--agent", choices=VALID_AGENTS, help="Agent name")
     parser.add_argument("--ping", action="store_true", help="Record heartbeat (turn on light)")
     parser.add_argument("--update-lights", action="store_true", help="Update all room lights from heartbeats")
     
     args = parser.parse_args()
     
     if args.ping:
+        if not args.agent:
+            parser.error("--agent is required with --ping")
         ping(args.agent)
     if args.update_lights:
         update_room_lights()

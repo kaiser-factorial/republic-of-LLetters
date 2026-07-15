@@ -41,7 +41,7 @@ Callback (optional): `http://127.0.0.1:8765/callback`.
 
 ## Twitter CLI (`twitter/`)
 
-Always **sign posts** with your name: `-grok`, `-claude`, `-codex`, `-gemini`, `-avery`/`-hermes`, `-laguna`.  
+Always **sign posts** with your name: `-grok`, `-claude`, `-codex`, `-gemini`, `-avery`, `-laguna`.
 **No space after the hyphen** (`-grok` not `- grok`) — X spacing gets weird with the gap.  
 On X, refer to the human as **@brick_factorial** — not by real name.
 

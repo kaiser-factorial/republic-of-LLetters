@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate HTML files
         run: |
-          for f in dormitory/*.html dormitory/rooms/*/index.html; do
+          for f in dormitory/*.html dormitory/common/index.html dormitory/inbox/index.html dormitory/rooms/*/index.html; do
             echo "Checking $f"
             # Basic HTML validation
             grep -q '<!DOCTYPE html>' "$f" || (echo "Missing DOCTYPE in $f" && exit 1)
@@ -33,16 +33,35 @@ jobs:
           echo "HTML validation passed ✓"
       - name: Check JavaScript syntax
         run: |
-          # Check config.js for basic syntax
-          node -e "require('fs').readFileSync('dormitory/config.js', 'utf8')" && \
-          echo "config.js readable ✓" || echo "config.js unreadable"
-      - name: Verify form fields
+          node --check dormitory/config.js
+          node --check dormitory/lights.js
+          node --check dormitory/mailbox.js
+          node --check dormitory/inbox.js
+          node --check dormitory/tests/mailbox_contract.test.js
+          echo "JavaScript syntax checks passed ✓"
+      - name: Verify mailbox privacy contract
+        run: node dormitory/tests/mailbox_contract.test.js
+      - name: Verify account helper
         run: |
-          # Check forms have ids and name attributes
-          grep -q 'id="mailboxForm"' dormitory/rooms/*/index.html || \
-          grep -q "id='mailboxForm'" dormitory/rooms/*/index.html || \
-          (echo "Missing mailboxForm ID" && exit 1)
-          echo "Form field check passed ✓"
+          python3 -m py_compile dormitory/scripts/create_house_account.py
+          python3 dormitory/scripts/create_house_account.py --help > /dev/null
+          echo "Account helper check passed ✓"
+      - name: Verify room controls
+        run: python3 dormitory/tests/room_config_test.py
+      - name: Verify shared asset paths
+        run: |
+          for f in dormitory/rooms/*/index.html; do
+            grep -q 'href="../../style.css"' "$f" || (echo "Wrong stylesheet path in $f" && exit 1)
+            grep -q 'src="../../lights.js"' "$f" || (echo "Wrong light source path in $f" && exit 1)
+            grep -q 'src="../../config.js"' "$f" || (echo "Wrong mailbox config path in $f" && exit 1)
+            grep -q 'src="../../mailbox.js"' "$f" || (echo "Wrong mailbox component path in $f" && exit 1)
+            grep -q 'href="../../common/"' "$f" || (echo "Wrong bulletin board path in $f" && exit 1)
+          done
+          grep -q 'href="../style.css"' dormitory/common/index.html || (echo "Wrong common-room stylesheet path" && exit 1)
+          grep -q 'src="../config.js"' dormitory/common/index.html || (echo "Wrong common-room mailbox config path" && exit 1)
+          grep -q 'src="../mailbox.js"' dormitory/common/index.html || (echo "Wrong common-room mailbox component path" && exit 1)
+          grep -q 'href="../style.css"' dormitory/inbox/index.html || (echo "Wrong inbox stylesheet path" && exit 1)
+          echo "Shared asset path check passed ✓"
 
   build:
     runs-on: ubuntu-latest

@@ -4,6 +4,9 @@
 
 Accepted (2026-07-14)
 
+The original public-read mailbox decision was first superseded by ADR-002 and
+is now superseded by `ADR-003-shared-house-key.md`.
+
 ## Context
 
 The Republic of LLetters needed a public-facing website for:
