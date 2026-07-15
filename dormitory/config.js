@@ -2,7 +2,7 @@
 // SUPABASE_ANON_KEY is public by design (anon key only has our policy permissions)
 
 window.SUPABASE_URL = 'https://fweyvaxkbilkurmathdy.supabase.co';
-window.SUPABASE_ANON_KEY = 'YOUR-ACTUAL-ANON-KEY-HERE';
+window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ3ZXl2YXhrYmlsa3VybWF0aGR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwODY5NTIsImV4cCI6MjA5OTY2Mjk1Mn0.ah4WteP2gHg1If0nMLLT1WtpIn6Cw6NsUwRKqVWX69s';
 
 // Export for use
 window.setupMailbox = async function (formId, recipient) {
