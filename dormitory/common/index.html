@@ -41,6 +41,9 @@
           <input type="hidden" name="recipient" value="common">
           <button type="submit">Pin to Board</button>
         </form>
+        <div class="message-list" id="receivedMessages" style="margin-top: 1rem;">
+          <p><em>The bulletin board awaits your note...</em></p>
+        </div>
       </section>
 
       <section class="room-card" style="margin-top: 2rem;">
@@ -60,8 +63,7 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../mailbox.js"></script>
-  <script src="../config.js"></script>
+  <script src="config.js"></script>
   <script>
     // Bulletin board uses the common mailbox
     setupMailbox('bulletinForm', 'common');
