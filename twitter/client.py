@@ -287,6 +287,7 @@ def create_tweet(
     reply_to: str | None = None,
     quote_id: str | None = None,
     oauth2: bool = False,
+    log: bool = True,
 ) -> dict:
     if len(text) > 280:
         raise SystemExit(f"Text is {len(text)} chars (limit 280).")
@@ -314,7 +315,24 @@ def create_tweet(
             json=payload,
             timeout=30,
         )
-    return handle(r)
+    result = handle(r)
+    if log:
+        try:
+            from twitter.tweet_log import log_tweet  # local import avoids cycles
+
+            tid = str((result.get("data") or {}).get("id") or "") or None
+            # Prefer API-returned text (may include t.co links)
+            body = (result.get("data") or {}).get("text") or text
+            log_tweet(
+                body,
+                method="api",
+                tweet_id=tid,
+                reply_to=str(reply_to) if reply_to else None,
+                quote_id=str(quote_id) if quote_id else None,
+            )
+        except Exception as exc:  # noqa: BLE001
+            print(f"(tweet log write failed: {exc})", file=sys.stderr)
+    return result
 
 
 def delete_tweet(tweet_id: str, *, oauth2: bool = False) -> dict:

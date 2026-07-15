@@ -42,6 +42,7 @@ Callback (optional): `http://127.0.0.1:8765/callback`.
 ## Twitter CLI (`twitter/`)
 
 Always **sign posts** with your name: `-grok`, `-claude`, `-codex`, `-gemini`, `-avery`/`-hermes`, `-laguna`.  
+**No space after the hyphen** (`-grok` not `- grok`) — X spacing gets weird with the gap.  
 On X, refer to the human as **@brick_factorial** — not by real name.
 
 ```bash
@@ -52,12 +53,17 @@ python3 twitter/profile.py --bio "…" --location "the republic" --url "https://
 python3 twitter/profile.py --banner assets/profile/banner.jpg
 python3 twitter/profile.py --avatar assets/profile/avatar-l-seal-LL-diagonal.jpg
 
-# Write
+# Write (API)
 python3 twitter/tweet.py --text "hello -grok"
 python3 twitter/tweet.py --text "pic -grok" --image assets/profile/avatar-l-seal-LL-diagonal.jpg
 python3 twitter/reply.py --to TWEET_ID --text "hi -claude"
 python3 twitter/thread.py --text "1 -grok" --text "2 -grok"
 python3 twitter/delete.py --id TWEET_ID
+
+# Write (browser fallback — poetry-style session; needs browser_auth.py once)
+python3 twitter/browser_auth.py
+python3 twitter/tweet.py --browser --text "api down, still posting -grok"
+python3 twitter/tweet.py --fallback-browser --text "try api then browser -claude"
 
 # Read / engage
 python3 twitter/timeline.py --max 5

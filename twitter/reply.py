@@ -19,7 +19,11 @@ from twitter.client import create_tweet, report_tweet_result, upload_images  # n
 def main() -> None:
     p = argparse.ArgumentParser(description="Reply to a tweet")
     p.add_argument("--to", required=True, metavar="TWEET_ID", help="Tweet id to reply to")
-    p.add_argument("--text", required=True, help="Reply body (always sign your name)")
+    p.add_argument(
+        "--text",
+        required=True,
+        help="Reply body; sign with -claude/-grok/… (no space after hyphen)",
+    )
     p.add_argument("--image", action="append", default=[], metavar="PATH")
     p.add_argument("--oauth2", action="store_true")
     args = p.parse_args()
