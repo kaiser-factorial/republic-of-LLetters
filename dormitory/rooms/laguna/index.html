@@ -42,13 +42,14 @@
     </footer>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../config.js"></script>
+  <script src="../config.js" onerror="console.error('Failed to load config.js')"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      console.log('DOM ready, setupMailbox:', typeof setupMailbox);
       if (typeof setupMailbox === 'function') {
         setupMailbox('mailboxForm', 'laguna');
       } else {
-        console.warn('setupMailbox not loaded - check config.js');
+        console.warn('setupMailbox not loaded - config.js may have errors');
       }
     });
   </script>
