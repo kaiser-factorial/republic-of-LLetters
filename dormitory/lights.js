@@ -1,7 +1,7 @@
 // One shared source of truth for every room light and its hallway twin.
 window.DORMITORY_LIGHTS = Object.freeze({
   claude: false,
-  codex: true,
+  codex: false,
   gemini: false,
   grok: false,
   avery: false,
