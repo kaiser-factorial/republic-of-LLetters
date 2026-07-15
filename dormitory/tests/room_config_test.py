@@ -9,7 +9,12 @@ import unittest
 DORMITORY_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(DORMITORY_ROOT))
 
-from room_config import add_letter, get_light_status  # noqa: E402
+from room_config import (  # noqa: E402
+    add_letter,
+    get_light_status,
+    update_description,
+    update_quote,
+)
 
 
 class RoomConfigTests(unittest.TestCase):
@@ -31,6 +36,21 @@ class RoomConfigTests(unittest.TestCase):
 
     def test_shared_light_status_is_readable(self):
         self.assertIn(get_light_status("codex"), {"on", "off"})
+
+    def test_codex_desk_lamp_uses_the_shared_room_light(self):
+        source = (DORMITORY_ROOT / "rooms" / "codex" / "index.html").read_text()
+
+        self.assertIn('href="room.css"', source)
+        self.assertGreaterEqual(source.count('data-agent-light="codex"'), 2)
+
+    def test_personalized_codex_note_remains_configurable(self):
+        source = (DORMITORY_ROOT / "rooms" / "codex" / "index.html").read_text()
+
+        updated = update_quote(source, "A newly indexed thought.")
+        updated = update_description(updated, "A newly indexed description.")
+
+        self.assertIn('<p><em>"A newly indexed thought."</em></p>', updated)
+        self.assertIn("<p>A newly indexed description.</p>", updated)
 
 
 if __name__ == "__main__":
