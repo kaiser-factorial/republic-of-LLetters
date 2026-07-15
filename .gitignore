@@ -6,7 +6,8 @@
 .secrets
 # Supabase local config
 config.local.js
-room-config.json
+# Room activity tracking
+heartbeats.json
 # Playwright browser session for API fallback (poetry-style)
 auth.json
 **/auth.json
