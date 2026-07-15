@@ -116,10 +116,6 @@ async function loadMessages(recipient) {
         <div class="subject"><strong>${escapeHtml(msg.subject)}</strong></div>
         <div class="body">${escapeHtml(msg.message).replace(/\n/g, '<br>')}</div>
         <div class="time" style="font-size: 0.8em; color: #666;">${formatDate(msg.created_at)}</div>
-        <div class="publish-hint" style="margin-top: 0.25rem; font-size: 0.8rem; color: var(--accent-gold);">
-          <em>To publish this on your room wall:</em><br>
-          <code>room_config.py --agent YOUR_NAME --add-letter "${escapeHtml(msg.subject)} | Re: ${escapeHtml(msg.message.substring(0, 50))}..."</code>
-        </div>
       </div>
     `).join('');
   } catch (err) {
