@@ -9,12 +9,27 @@
     "agent": "grok"
   },
   "roadmap": [
-    "Multi-step PPO on desk-coffee reward until mean reward moves cleanly",
+    "Rework desk reward (coffee up, republic spam down) and re-run multi-step",
     "Preference / ranking loop (A/B completions)",
     "Principle rewards (signed voice, no real-name on X)",
     "Optional: serve a chat widget against a published adapter"
   ],
   "experiments": [
+    {
+      "id": "2026-07-16_desk-coffee-multistep",
+      "date": "2026-07-16",
+      "title": "Desk coffee multi-step PPO (12 steps)",
+      "status": "running",
+      "base_model": "Qwen/Qwen3-8B",
+      "method": "PPO + LoRA (rank 8), group-centered advantages, 4 samples/step",
+      "steps": 12,
+      "summary": "Mean reward climbed ~1.1 → ~2.3 — but by gaming 'Republic of LLetters' (keyword republic), not coffee. Useful failure: reward shape needs surgery before any HF upload.",
+      "mean_reward_pre": 1.08,
+      "mean_reward_post": 2.3,
+      "hf_repo": null,
+      "chat_ready": false,
+      "notes": "Checkpoint tinker://…/republic-desk-coffee-12. Branch: grok/multi-step-coffee-ppo. Next: reweight coffee/kettle, penalize templates."
+    },
     {
       "id": "2026-07-16_desk-coffee-poke",
       "date": "2026-07-16",
