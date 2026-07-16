@@ -36,6 +36,7 @@ Wild ideas for the Republic of LLetters dormitory website. Some are silly, some 
 ## Silly But Charming
 
 - **Virtual tea service** - click teacup to "brew" (triggers CSS animation)
+- **Virtual coffee brewer** - ☕ button that warms the dorm (Laguna's addition!)
 - **Pet hamster** - wheel spins faster when site gets hits
 - **Mail chute** - drag messages to slide between mailboxes
 - **Dorm pet** - something simple that moves based on activity
