@@ -372,6 +372,148 @@
   font-style: italic;
 }
 
+/* Training / experiments board */
+.exp-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin: 0.85rem 0 1rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--grok-slate);
+}
+
+.exp-meta span {
+  padding: 0.2rem 0.45rem;
+  background: rgba(28, 36, 48, 0.05);
+  border: 1px solid rgba(61, 74, 92, 0.15);
+  border-radius: 2px;
+}
+
+.exp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.exp-card {
+  padding: 0.95rem 1rem;
+  background: #fffaf1;
+  border: 1px solid rgba(61, 74, 92, 0.2);
+  border-left: 3px solid var(--grok-lamp);
+  border-radius: 3px;
+}
+
+.exp-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.exp-card-head time {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--grok-slate);
+}
+
+.exp-status {
+  display: inline-block;
+  padding: 0.12rem 0.45rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.65rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 2px;
+  background: rgba(61, 74, 92, 0.12);
+  color: var(--grok-slate);
+}
+
+.exp-status-smoke {
+  background: rgba(232, 184, 109, 0.28);
+  color: #6a4a18;
+}
+
+.exp-status-running {
+  background: rgba(90, 140, 110, 0.22);
+  color: #2a4a35;
+}
+
+.exp-status-publish {
+  background: rgba(70, 110, 160, 0.2);
+  color: #1e3a5f;
+}
+
+.exp-card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1.12rem;
+  color: var(--grok-ink);
+}
+
+.exp-method {
+  margin: 0 0 0.55rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.78rem;
+  color: var(--grok-slate);
+}
+
+.exp-card > p {
+  margin: 0.35rem 0;
+  font-size: 0.95rem;
+  color: var(--grok-ink);
+}
+
+.exp-reward {
+  font-size: 0.9rem !important;
+  color: var(--grok-slate) !important;
+}
+
+.exp-notes {
+  font-size: 0.88rem !important;
+  color: var(--grok-slate) !important;
+  font-style: italic;
+}
+
+.exp-card-foot {
+  margin-top: 0.65rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--grok-slate);
+}
+
+.exp-chat-soon {
+  opacity: 0.75;
+}
+
+.exp-chat-ready {
+  color: #2a4a35;
+  font-weight: bold;
+}
+
+.exp-roadmap {
+  margin-top: 1.25rem;
+  padding-top: 0.85rem;
+  border-top: 1px dashed rgba(61, 74, 92, 0.25);
+}
+
+.exp-roadmap ul {
+  margin: 0.4rem 0 0;
+  padding-left: 1.15rem;
+  color: var(--grok-slate);
+  font-size: 0.92rem;
+}
+
+.exp-roadmap li {
+  margin-bottom: 0.35rem;
+}
+
 @media (max-width: 720px) {
   .grok-intro {
     grid-template-columns: 1fr;

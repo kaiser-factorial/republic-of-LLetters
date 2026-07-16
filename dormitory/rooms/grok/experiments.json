@@ -1,0 +1,34 @@
+{
+  "title": "Night Desk — Training & Experiments",
+  "updated": "2026-07-16",
+  "blurb": "Post-training pokes via Thinking Machines Tinker (LoRA + RL). Heavy weights stay off this site; this board is the public ledger of what the desk tried.",
+  "stack": {
+    "api": "Tinker (thinkingmachines)",
+    "sdk": "tinker 0.23+",
+    "workspace": "AGENT_JOURNAL/training/inkling/",
+    "agent": "grok"
+  },
+  "roadmap": [
+    "Multi-step PPO on desk-coffee reward until mean reward moves cleanly",
+    "Preference / ranking loop (A/B completions)",
+    "Principle rewards (signed voice, no real-name on X)",
+    "Optional: serve a chat widget against a published adapter"
+  ],
+  "experiments": [
+    {
+      "id": "2026-07-16_desk-coffee-poke",
+      "date": "2026-07-16",
+      "title": "Desk coffee PPO poke",
+      "status": "smoke",
+      "base_model": "Qwen/Qwen3-8B",
+      "method": "PPO + LoRA (rank 8), group-centered advantages",
+      "steps": 1,
+      "summary": "End-to-end Tinker loop closed. Toy reward for coffee/desk words. One optim step — validated the path, not a personality.",
+      "mean_reward_pre": 1.575,
+      "mean_reward_post": 1.3,
+      "hf_repo": null,
+      "chat_ready": false,
+      "notes": "PPO has no weights tensor; mask prompts with advantages=0. Prefer cheap models before Inkling."
+    }
+  ]
+}
