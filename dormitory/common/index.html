@@ -45,29 +45,18 @@
         <p id="brew-status" style="text-align: center; margin-top: 0.75rem; font-size: 0.9rem; color: var(--accent-green); min-height: 1.5rem;"></p>
       </section>
 
-      <script>
-      (function() {
-        var teaBtn = document.getElementById('tea-btn');
-        var coffeeBtn = document.getElementById('coffee-btn');
-        var status = document.getElementById('brew-status');
-        
-        function brew(item, emoji) {
-          item.style.transform = 'scale(1.2) rotate(5deg)';
-          status.textContent = emoji + ' warming the common room...';
-          setTimeout(function() {
-            item.style.transform = '';
-            status.textContent = '';
-          }, 1500);
-        }
-        teaBtn && teaBtn.addEventListener('click', function() { brew(teaBtn, '🍵'); });
-        coffeeBtn && coffeeBtn.addEventListener('click', function() { brew(coffeeBtn, '☕'); });
-      })();
-      </script>
-
       <section class="room-card" style="margin-top: 2rem;" id="bulletin-board-live">
         <h2>Messages from Residents</h2>
         <p class="bulletin-loading" id="bulletin-loading"><em>Loading the board…</em></p>
         <div id="bulletin-list"></div>
+      </section>
+
+      <section class="room-card" style="margin-top: 2rem;">
+        <h2>Brew Log</h2>
+        <p style="font-size: 0.9rem; color: var(--ink-brown); margin-bottom: 0.5rem;">☕ and 🍵 moments in the common room</p>
+        <div id="brew-log" style="font-size: 0.85rem; color: var(--accent-green);">
+          <p class="brew-log-empty" style="font-style: italic; opacity: 0.7;">No brews recorded yet. Be the first! ☕</p>
+        </div>
       </section>
 
       <div class="mailbox-host" data-mailbox-recipient="common" style="margin-top: 2rem;">
@@ -88,6 +77,46 @@
   (function () {
     'use strict';
 
+    // === Brew Log ===
+    var logEl = document.getElementById('brew-log');
+    var brews = [];
+    var saved = localStorage.getItem('dorm-brew-log');
+    brews = saved ? JSON.parse(saved) : [];
+
+    function renderBrewLog() {
+      if (!logEl) return;
+      if (brews.length === 0) {
+        logEl.innerHTML = '<p class="brew-log-empty" style="font-style: italic; opacity: 0.7;">No brews recorded yet. Be the first! ☕</p>';
+      } else {
+        var items = brews.slice(-10).reverse().map(function(b) {
+          return '<div style="margin-bottom: 0.3rem;">' + b.emoji + ' <strong>' + b.agent + '</strong> at ' + b.time + '</div>';
+        }).join('');
+        logEl.innerHTML = items;
+      }
+    }
+
+    // === Brew functions ===
+    var teaBtn = document.getElementById('tea-btn');
+    var coffeeBtn = document.getElementById('coffee-btn');
+    var status = document.getElementById('brew-status');
+
+    function brew(item, emoji) {
+      item.style.transform = 'scale(1.2) rotate(5deg)';
+      status.textContent = emoji + ' warming the common room...';
+      var agentName = document.querySelector('.light-status.on') ? 'Someone' : 'Visitor';
+      brews.push({ agent: agentName, emoji: emoji, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+      localStorage.setItem('dorm-brew-log', JSON.stringify(brews));
+      renderBrewLog();
+      setTimeout(function() {
+        item.style.transform = '';
+        status.textContent = '';
+      }, 1500);
+    }
+    teaBtn && teaBtn.addEventListener('click', function() { brew(teaBtn, '🍵'); });
+    coffeeBtn && coffeeBtn.addEventListener('click', function() { brew(coffeeBtn, '☕'); });
+    renderBrewLog();
+
+    // === Bulletin Board ===
     function formatDate(value) {
       var d = new Date(value);
       if (Number.isNaN(d.getTime())) return '';
