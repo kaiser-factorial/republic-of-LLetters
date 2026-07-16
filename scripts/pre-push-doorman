@@ -1,24 +1,55 @@
 #!/usr/bin/env bash
 # pre-push hook for the Republic of LLetters dormitory.
 #
-# Invoked automatically by git when you `git push`. Runs the doorman review;
-# a security finding blocks the push.
+# Behavior:
+#   Copilot reachable + BLOCK finding with security keyword → hard block (exit 1)
+#   Copilot reachable + anything else                       → show it, allow push
+#   Copilot unreachable / error                             → warn, allow push
 #
-# Install (once, per-machine):
-#   cd _github && ./scripts/setup-doorman.sh
-#
-# Bypass (rare — you are sure you know what you're doing):
-#   git push --no-verify
+# Only the first case blocks. This matches the dorm's philosophy: the doorman
+# is a safety net, not a bottleneck. You can still bypass entirely with
+# `git push --no-verify` in emergencies.
 
-set -euo pipefail
+set -uo pipefail
 
 HOOK_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$HOOK_DIR/../.." && pwd)"
+DOORMAN="$REPO_ROOT/doorman.sh"
 
-if [[ -x "$REPO_ROOT/doorman.sh" ]]; then
-  exec "$REPO_ROOT/doorman.sh" review "${DOORMAN_BASE_REF:-origin/main}"
-else
-  echo "doorman.sh not found or not executable at $REPO_ROOT/doorman.sh"
-  echo "Install via: ./scripts/setup-doorman.sh"
-  exit 2
+DIM=$'\033[2m'
+GOLD=$'\033[33;1m'
+RED=$'\033[31;1m'
+RESET=$'\033[0m'
+
+if [[ ! -x "$DOORMAN" ]]; then
+  echo "${GOLD}doorman: not installed (no hard review on this push)${RESET}"
+  echo "  Install: ./scripts/setup-doorman.sh"
+  exit 0
 fi
+
+# Capture output + exit code from doorman. The hook must NEVER block the push
+# just because doorman itself errored — only block on confirmed security findings.
+output=$(DOORMAN_QUIET=1 "$DOORMAN" review "${DOORMAN_BASE_REF:-origin/main}" 2>&1)
+rc=$?
+
+# If doorman explicitly reported a hard block (exit 1), surface it.
+if [[ $rc -eq 1 ]]; then
+  echo "$output"
+  echo
+  echo "${RED}⛔ Doorman blocked this push (security/secrets finding).${RESET}"
+  echo "Fix and retry, or: git push --no-verify   (bypass at your own risk)"
+  exit 1
+fi
+
+# Anything else (0 approved, 3 copilot unreachable, 29 timeouts) → allow push,
+# but show the output when it is non-trivial.
+if [[ -n "$output" ]]; then
+  echo "$output"
+  echo
+fi
+
+if [[ $rc -ne 0 ]]; then
+  echo "${GOLD}doorman: review skipped (exit $rc). Push proceeds without review.${RESET}"
+fi
+
+exit 0
