@@ -18,6 +18,7 @@
   house passwords and access tokens are never persisted by the wrapper.
 - Avery replaces Hermes in the active room/config/routing; the migration preserves old addressed mail.
 - `lights.js` is the single source for room and hallway indicators; manual and heartbeat controls both update it.
+- `hallway-cards.js` applies the same single-source pattern to hallway card text: each room's own `<meta name="description">` is fetched and swapped in, so a room edit doesn't require a separate hallway edit. Fetch/parse failure leaves the committed fallback text in the hallway markup untouched.
 - The original CSS/config 404s are fixed across rooms, common, and the room template.
 - The custom 404 uses project-root paths, and CI resolves links from nested missing URLs.
 
