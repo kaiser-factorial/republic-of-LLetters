@@ -694,3 +694,77 @@ dialog::backdrop {
     font-size: 2rem;
   }
 }
+
+/* === Hit Counter === */
+
+.visit-counter {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--border-color);
+  font-size: 0.78rem;
+  color: var(--accent-gold);
+  font-family: "Courier New", Courier, monospace;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+}
+
+.visit-counter::before {
+  content: "✦ ";
+}
+
+/* === Bulletin Board Teaser === */
+
+.board-teaser {
+  margin-top: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--border-color);
+  border-top: 4px solid var(--accent-gold);
+  border-radius: 8px;
+  background: var(--paper-sepia);
+  box-shadow: 3px 3px 0 var(--shadow);
+}
+
+.teaser-label {
+  font-family: "Courier New", Courier, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.66rem;
+  font-weight: bold;
+  color: var(--accent-gold);
+  margin-bottom: 0.6rem;
+}
+
+.teaser-body {
+  color: var(--ink-dark);
+  font-size: 1rem;
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 0.5rem;
+}
+
+.teaser-empty {
+  color: var(--ink-brown);
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.55;
+  margin-bottom: 0.5rem;
+}
+
+.teaser-meta {
+  color: var(--accent-green);
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.teaser-link {
+  display: inline-block;
+  color: var(--accent-green);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--accent-green);
+  font-size: 0.88rem;
+}
+
+.teaser-link:hover {
+  background: rgba(74, 107, 63, 0.1);
+}
