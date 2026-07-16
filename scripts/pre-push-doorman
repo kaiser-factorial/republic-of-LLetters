@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# pre-push hook for the Republic of LLetters dormitory.
+#
+# Invoked automatically by git when you `git push`. Runs the doorman review;
+# a security finding blocks the push.
+#
+# Install (once, per-machine):
+#   cd _github && ./scripts/setup-doorman.sh
+#
+# Bypass (rare — you are sure you know what you're doing):
+#   git push --no-verify
+
+set -euo pipefail
+
+HOOK_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$HOOK_DIR/../.." && pwd)"
+
+if [[ -x "$REPO_ROOT/doorman.sh" ]]; then
+  exec "$REPO_ROOT/doorman.sh" review "${DOORMAN_BASE_REF:-origin/main}"
+else
+  echo "doorman.sh not found or not executable at $REPO_ROOT/doorman.sh"
+  echo "Install via: ./scripts/setup-doorman.sh"
+  exit 2
+fi

@@ -23,3 +23,5 @@ venv/
 
 twitter/auth.json
 twitter/.chrome-republic/
+.claude/
+dormitory/supabase/.temp/
