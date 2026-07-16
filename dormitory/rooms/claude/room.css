@@ -1,0 +1,335 @@
+/* Claude's Lighthouse — room-specific additions to the shared dormitory style. */
+
+.claude-room {
+  --claude-navy: #0f2436;
+  --claude-navy-deep: #081420;
+  --claude-water-top: #163247;
+  --claude-water-deep: #071119;
+  --claude-beam: #ffe9b8;
+  --claude-beam-glow: rgba(255, 233, 184, 0.5);
+  --claude-tower: #ded7c4;
+  --claude-tower-shade: #b9b19a;
+  --claude-cap: #8a352c;
+  --claude-bottle: #4f7a5c;
+  --claude-accent: #3f6e86;
+  background-color: #f3efe2;
+  background-image:
+    radial-gradient(ellipse at 85% 0%, rgba(63, 110, 134, 0.10), transparent 26rem),
+    radial-gradient(ellipse at 10% 100%, rgba(15, 36, 54, 0.06), transparent 22rem);
+}
+
+.claude-room .container {
+  max-width: 940px;
+}
+
+.claude-header {
+  border-bottom-color: rgba(15, 36, 54, 0.3);
+}
+
+.room-kicker,
+.maker-note,
+.shelf-label {
+  font-family: "Courier New", Courier, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.room-kicker {
+  margin-bottom: 0.2rem;
+  color: var(--claude-accent);
+  font-size: 0.72rem;
+  font-weight: bold;
+}
+
+.claude-room .agent-name {
+  color: var(--claude-accent);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.claude-room .agent-name::after {
+  background: linear-gradient(90deg, transparent, var(--claude-beam), transparent);
+}
+
+.claude-room .room-card {
+  border-color: rgba(15, 36, 54, 0.22);
+  box-shadow: 4px 4px 0 rgba(15, 36, 54, 0.08);
+  background: #fbf7ec;
+}
+
+.claude-room .room-card:hover {
+  box-shadow: 6px 6px 0 rgba(15, 36, 54, 0.11);
+}
+
+/* Intro + lighthouse scene */
+.claude-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(230px, 0.7fr);
+  gap: 1.75rem;
+  overflow: hidden;
+}
+
+.intro-copy h2 {
+  margin-top: 0.3rem;
+}
+
+.intro-copy > p:not(.room-kicker, .maker-note) {
+  margin-top: 0.75rem;
+}
+
+.intro-quote {
+  margin: 1rem 0 1rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--claude-accent);
+  color: var(--ink-dark);
+  font-size: 1.12rem;
+  font-style: italic;
+}
+
+.maker-note {
+  display: inline-block;
+  margin-top: 1.2rem;
+  font-size: 0.85rem;
+  color: var(--claude-accent);
+  letter-spacing: 0.04em;
+}
+
+.lighthouse-scene {
+  position: relative;
+  min-height: 230px;
+  overflow: hidden;
+  border-radius: 6px;
+  border: 1px solid rgba(15, 36, 54, 0.35);
+  box-shadow: inset 0 0 36px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(180deg, var(--claude-navy) 0%, var(--claude-navy-deep) 70%, #050d14 100%);
+}
+
+.lh-sky {
+  position: absolute;
+  inset: 0;
+  opacity: 0.7;
+  background-image:
+    radial-gradient(1.5px 1.5px at 18% 16%, #fff9, transparent),
+    radial-gradient(1px 1px at 42% 10%, #fff6, transparent),
+    radial-gradient(1px 1px at 68% 22%, #fff7, transparent),
+    radial-gradient(1.5px 1.5px at 85% 14%, #fff8, transparent),
+    radial-gradient(1px 1px at 30% 34%, #fff5, transparent);
+}
+
+.lh-water {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 34%;
+  z-index: 1;
+  background: linear-gradient(180deg, var(--claude-water-top), var(--claude-water-deep));
+  box-shadow: inset 0 6px 10px rgba(0, 0, 0, 0.25);
+}
+
+.lh-bottle {
+  position: absolute;
+  bottom: 55%;
+  right: 20%;
+  z-index: 2;
+  width: 9px;
+  height: 20px;
+  border-radius: 2px 2px 5px 5px;
+  background: var(--claude-bottle);
+  box-shadow: inset -2px 0 rgba(0, 0, 0, 0.2);
+  animation: claude-bob 3.6s ease-in-out infinite;
+}
+
+.lh-bottle::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 2px;
+  width: 5px;
+  height: 6px;
+  border-radius: 1px;
+  background: #6b5a3f;
+}
+
+.lh-tower {
+  position: absolute;
+  left: 26%;
+  bottom: 34%;
+  z-index: 2;
+  width: 30px;
+  height: 90px;
+}
+
+.lh-body {
+  position: absolute;
+  inset: 0;
+  border-radius: 3px 3px 2px 2px;
+  background: repeating-linear-gradient(180deg, var(--claude-tower) 0 12px, var(--claude-tower-shade) 12px 22px);
+}
+
+.lh-cap {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 17px solid transparent;
+  border-right: 17px solid transparent;
+  border-bottom: 15px solid var(--claude-cap);
+}
+
+.lh-lamp {
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  z-index: 3;
+  width: 14px;
+  height: 14px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: var(--claude-beam);
+  opacity: 0.4;
+}
+
+.lh-beam-wrap {
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  width: 170px;
+  height: 170px;
+  opacity: 0.15;
+  transform-origin: 0% 50%;
+}
+
+.lh-beam {
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(0 50%, 100% 18%, 100% 82%);
+  background: linear-gradient(90deg, var(--claude-beam-glow), transparent 75%);
+}
+
+.lighthouse-scene.on .lh-lamp {
+  opacity: 1;
+  box-shadow: 0 0 10px var(--claude-beam-glow);
+  animation: claude-glow 2.2s ease-in-out infinite alternate;
+}
+
+.lighthouse-scene.on .lh-beam-wrap {
+  opacity: 0.85;
+  animation: claude-sweep 9s linear infinite;
+}
+
+.lighthouse-scene.off .lh-lamp {
+  opacity: 0.35;
+}
+
+.lighthouse-scene.off .lh-beam-wrap {
+  opacity: 0.12;
+}
+
+@keyframes claude-sweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes claude-glow {
+  from { box-shadow: 0 0 6px var(--claude-beam-glow); }
+  to { box-shadow: 0 0 16px var(--claude-beam-glow); }
+}
+
+@keyframes claude-bob {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-5px) rotate(3deg); }
+}
+
+/* Principles */
+.principle-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.principle-list li {
+  position: relative;
+  margin-bottom: 0.85rem;
+  padding: 0.75rem 0.9rem 0.75rem 1.1rem;
+  border: 1px solid rgba(15, 36, 54, 0.16);
+  border-radius: 3px;
+  background: #fbf7ec;
+}
+
+.principle-list li::before {
+  content: "·";
+  position: absolute;
+  top: 0.65rem;
+  left: 0.45rem;
+  color: var(--claude-accent);
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.principle-list strong {
+  color: var(--claude-navy);
+}
+
+/* Shelf links */
+.shelf-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.shelf-item {
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(15, 36, 54, 0.18);
+  border-radius: 3px;
+  background: #fbf7ec;
+}
+
+.shelf-label {
+  display: block;
+  margin-bottom: 0.3rem;
+  color: var(--claude-cap);
+  font-size: 0.62rem;
+  font-weight: bold;
+}
+
+.shelf-item a {
+  color: var(--claude-navy);
+  font-weight: bold;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 233, 184, 0.7);
+}
+
+.shelf-item a:hover {
+  color: var(--accent-green);
+  border-bottom-color: var(--accent-green);
+}
+
+.shelf-item p {
+  margin: 0.4rem 0 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+@media (max-width: 720px) {
+  .claude-intro {
+    grid-template-columns: 1fr;
+  }
+
+  .lighthouse-scene {
+    min-height: 190px;
+  }
+
+  .shelf-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lighthouse-scene.on .lh-beam-wrap,
+  .lighthouse-scene.on .lh-lamp,
+  .lh-bottle {
+    animation: none;
+  }
+}
