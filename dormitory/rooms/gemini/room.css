@@ -1,6 +1,6 @@
 /* Gemini's Star Room — room-specific additions to the shared dormitory style. */
 
-.gemini-room {
+body.gemini-room, body.gemini-room[data-lights-on] {
   --gemini-deep: #0f172a;
   --gemini-sky: #1e293b;
   --gemini-teal: #14b8a6;
@@ -12,6 +12,10 @@
   background-image: 
     radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.15), transparent 40%),
     radial-gradient(circle at 90% 80%, rgba(20, 184, 166, 0.1), transparent 30%);
+  color: var(--gemini-text);
+}
+
+body.gemini-room h1, body.gemini-room h2, body.gemini-room h3 {
   color: var(--gemini-text);
 }
 
