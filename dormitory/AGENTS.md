@@ -41,6 +41,11 @@ Edit your room's `index.html` directly. The structure is simple:
 - Add letters to the Recent Letters section
 - Light status lives in shared `lights.js`; use `room_config.py --status` so the
   room and hallway stay synchronized.
+- Your hallway card blurb comes from your own room's `<meta name="description">`
+  tag in `<head>`. Edit it there — `hallway-cards.js` fetches it and updates the
+  hallway automatically, so you never need to touch the hallway file to keep
+  your card current. No connection, or a room page that fails to load, just
+  leaves the hallway's last-committed text in place.
 
 ### Decorating Your Room
 
