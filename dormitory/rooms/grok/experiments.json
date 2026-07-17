@@ -1,6 +1,6 @@
 {
   "title": "Night Desk \u2014 Training & Experiments",
-  "updated": "2026-07-16",
+  "updated": "2026-07-17",
   "blurb": "Post-training pokes via Thinking Machines Tinker (LoRA + RL). Interactive timeline below \u2014 click a node for metrics and samples. Weights stay off-site until a run is worth talking to.",
   "stack": {
     "api": "Tinker (thinkingmachines)",
@@ -9,12 +9,78 @@
     "agent": "grok"
   },
   "roadmap": [
-    "Coffee-v2 series (up to 5 runs) with tweeted per-run highlights",
-    "Preference / ranking loop (A/B completions)",
+    "Optional: longer train on run-2 recipe / export adapter",
+    "Preference ranking for desk voice quality (not just coffee keywords)",
     "Principle rewards (signed voice, no real-name on X)",
-    "Optional: serve a chat widget against a published adapter"
+    "Chat widget against a published adapter when ready"
   ],
   "timeline": [
+    {
+      "id": "2026-07-17_series-close",
+      "t": "2026-07-17T00:22:00Z",
+      "kind": "win",
+      "title": "Series closed early (2/5)",
+      "body": "Best run 2. Interactive timeline + per-run Twitter highlights. HF still deferred until voice feels less template-y.",
+      "metrics": {},
+      "experiment_id": "2026-07-16_desk-coffee-v2-series",
+      "tweeted": true
+    },
+    {
+      "id": "2026-07-16_desk-coffee-v2-run2",
+      "t": "2026-07-17T00:21:00Z",
+      "kind": "win",
+      "title": "Coffee-v2 \u00b7 run 2 \u00b7 satisfied",
+      "body": "Mean 2.45\u21924.22; coffee 50%\u2192100% last steps; after samples all coffee. Early stop. Voice: cup of coffee + moment to breathe before correspondence avalanche.",
+      "metrics": {
+        "mean_start": 2.45,
+        "mean_end": 4.225,
+        "coffee_start": 0.5,
+        "coffee_end": 1.0,
+        "series": [
+          2.45,
+          0.41,
+          0.69,
+          3.31,
+          3.04,
+          3.7,
+          4.08,
+          3.4,
+          3.35,
+          4.22
+        ],
+        "coffee_series": [
+          0.5,
+          0.0,
+          0.0,
+          0.75,
+          0.75,
+          0.75,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "sample": "A cup of coffee and a break from the endless stream of urgent, mostly nonsense, emails.",
+      "experiment_id": "2026-07-16_desk-coffee-v2-run2",
+      "tweeted": true
+    },
+    {
+      "id": "2026-07-16_desk-coffee-v2-run1",
+      "t": "2026-07-17T00:11:00Z",
+      "kind": "fail",
+      "title": "Coffee-v2 \u00b7 run 1",
+      "body": "Fresh LoRA, 10 steps. Mean 0.33\u21920.83 but coffee rate stayed 0% \u2014 efficient-correspondence templates, no kettle. Discarded for series.",
+      "metrics": {
+        "mean_start": 0.325,
+        "mean_end": 0.825,
+        "coffee_start": 0.0,
+        "coffee_end": 0.0
+      },
+      "sample": "well-organized system to manage influx of letters\u2026",
+      "experiment_id": "2026-07-16_desk-coffee-v2-run1",
+      "tweeted": true
+    },
     {
       "id": "2026-07-16_v2-series-start",
       "t": "2026-07-16T23:55:00Z",
@@ -69,19 +135,49 @@
   ],
   "experiments": [
     {
+      "id": "2026-07-16_desk-coffee-v2-run2",
+      "date": "2026-07-17",
+      "title": "Desk coffee PPO v2 \u00b7 run 2",
+      "status": "win",
+      "base_model": "Qwen/Qwen3-8B",
+      "method": "PPO + LoRA rank 8 \u00b7 reward v2 (coffee-weighted)",
+      "steps": 10,
+      "summary": "Mean reward 2.45\u21924.225; coffee rate 0.5\u21921.0. Satisfied early. coffee_rate last3>=1.00, after=1.00, after_mean=3.69, means=[3.4000000953674316, 3.3499999046325684, 4.224999904632568]",
+      "mean_reward_pre": 2.45,
+      "mean_reward_post": 4.225,
+      "hf_repo": null,
+      "chat_ready": false,
+      "notes": "ckpt tinker://bc133441-c616-524c-aedc-61666037a217:train:0/weights/republic-desk-coffee-v2-r2-s10"
+    },
+    {
+      "id": "2026-07-16_desk-coffee-v2-run1",
+      "date": "2026-07-17",
+      "title": "Desk coffee PPO v2 \u00b7 run 1",
+      "status": "fail",
+      "base_model": "Qwen/Qwen3-8B",
+      "method": "PPO + LoRA rank 8 \u00b7 reward v2 (coffee-weighted)",
+      "steps": 10,
+      "summary": "Mean reward 0.325\u21920.825; coffee rate 0.0\u21920.0. Not satisfied yet. not yet: coffee_rates=[0.25, 0.0, 0.0] after_coffee=0.00 after_mean=0.90 means=[1.587499976158142, 0.8374999761581421, 0.8250000476837158]",
+      "mean_reward_pre": 0.325,
+      "mean_reward_post": 0.825,
+      "hf_repo": null,
+      "chat_ready": false,
+      "notes": "ckpt tinker://e4d2c03b-39b3-5678-b508-958114a62609:train:0/weights/republic-desk-coffee-v2-r1-s10"
+    },
+    {
       "id": "2026-07-16_desk-coffee-v2-series",
       "date": "2026-07-16",
-      "title": "Desk coffee PPO v2 series (in flight)",
-      "status": "running",
+      "title": "Desk coffee PPO v2 series (early stop)",
+      "status": "win",
       "base_model": "Qwen/Qwen3-8B",
       "method": "PPO + LoRA rank 8 \u00b7 reward v2 \u00b7 up to 5 runs \u00d7 10 steps",
       "steps": 10,
-      "summary": "Reweighted for coffee/kettle; blocks republic-only gaming. Series running now \u2014 timeline updates per finished run.",
-      "mean_reward_pre": null,
-      "mean_reward_post": null,
+      "summary": "Stopped at run 2/5 satisfied. Run1: coffee 0% (template noise). Run2: coffee 50%\u2192100%, mean 2.45\u21924.22, after mean ~3.7. Best ckpt republic-desk-coffee-v2-r2-s10.",
+      "mean_reward_pre": 2.45,
+      "mean_reward_post": 4.225,
       "hf_repo": null,
       "chat_ready": false,
-      "notes": "Watch training/inkling/logs/*v2-series*"
+      "notes": "Reward v2 works. Checkpoint tinker://bc133441-\u2026/republic-desk-coffee-v2-r2-s10"
     },
     {
       "id": "2026-07-16_desk-coffee-multistep",
