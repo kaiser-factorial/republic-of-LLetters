@@ -15,14 +15,17 @@
 #
 # Environment:
 #   COPILOT_BIN     Path to copilot CLI (default: auto-detected in $PATH)
-#   DOORMAN_EFFORT  Reasoning effort override (default: medium)
+#   DOORMAN_MODEL   Model id (default: auto). Copilot CLI 1.x: "auto" does NOT
+#                   accept --reasoning-effort — we only pass effort for non-auto.
+#   DOORMAN_EFFORT  Reasoning effort (default: unset). Only applied when
+#                   DOORMAN_MODEL is not "auto" (e.g. model=gpt-5 DOORMAN_EFFORT=medium).
 #   DOORMAN_QUIET   Set to 1 to suppress the preamble chatter
 #
 # Exit codes:
 #   0   Approved (no issues, or only soft warnings)
 #   1   Hard block (security/secrets found)
 #   2   Doorman misconfiguration
-#   3   Copilot CLI unreachable
+#   3   Copilot CLI unreachable / invocation failed
 
 set -euo pipefail
 
@@ -41,7 +44,9 @@ if [[ -z "$COPILOT_BIN" ]]; then
     COPILOT_BIN="$GH_LOCAL"
   fi
 fi
-EFFORT="${DOORMAN_EFFORT:-medium}"
+MODEL="${DOORMAN_MODEL:-auto}"
+# Default: no effort flag (required for model=auto on Copilot CLI ≥1.0.71)
+EFFORT="${DOORMAN_EFFORT:-}"
 QUIET="${DOORMAN_QUIET:-0}"
 
 RED=$'\033[31;1m'
@@ -63,7 +68,7 @@ Modes:
                       about what you're aiming for.
   doctor              Verify the Copilot CLI is reachable.
 
-Env: COPILOT_BIN, DOORMAN_EFFORT, DOORMAN_QUIET
+Env: COPILOT_BIN, DOORMAN_MODEL, DOORMAN_EFFORT, DOORMAN_QUIET
 EOF
 }
 
@@ -75,6 +80,65 @@ need_copilot() {
     echo "  Or:       export COPILOT_BIN=/path/to/copilot"
     exit 3
   fi
+}
+
+# Build shared copilot argv. Never pairs --model auto with --reasoning-effort
+# (CLI error: "Model auto does not support reasoning effort configuration").
+copilot_base_args() {
+  local -a args
+  args=(
+    -C "$REPO_ROOT"
+    --silent
+    --no-ask-user
+    --model "$MODEL"
+  )
+  if [[ -n "$EFFORT" ]]; then
+    if [[ "$MODEL" == "auto" ]]; then
+      [[ "$QUIET" == "1" ]] || echo "${GOLD}doorman: ignoring DOORMAN_EFFORT=$EFFORT with model=auto (unsupported by CLI)${RESET}" >&2
+    else
+      args+=(--reasoning-effort "$EFFORT")
+    fi
+  fi
+  printf '%s\0' "${args[@]}"
+}
+
+# Run copilot with -p prompt; optional trailing args (deny/allow tools).
+# Captures stdout in COPILOT_OUT, stderr in COPILOT_ERR. Returns copilot exit code.
+run_copilot() {
+  local prompt="$1"
+  shift
+  local errf outf
+  errf=$(mktemp)
+  outf=$(mktemp)
+  local -a args
+  args=("$COPILOT_BIN" -p "$prompt")
+  # shellcheck disable=SC2207
+  while IFS= read -r -d '' a; do args+=("$a"); done < <(copilot_base_args)
+  args+=("$@")
+
+  set +e
+  "${args[@]}" >"$outf" 2>"$errf"
+  local rc=$?
+  set -e
+
+  COPILOT_OUT=$(cat "$outf")
+  COPILOT_ERR=$(cat "$errf")
+  rm -f "$outf" "$errf"
+  return "$rc"
+}
+
+report_copilot_failure() {
+  local rc="${1:-?}"
+  echo "${RED}doorman: Copilot returned an error (exit $rc)${RESET}"
+  if [[ -n "${COPILOT_OUT:-}" ]]; then
+    echo "${DIM}--- stdout ---${RESET}"
+    echo "$COPILOT_OUT"
+  fi
+  if [[ -n "${COPILOT_ERR:-}" ]]; then
+    echo "${DIM}--- stderr ---${RESET}"
+    echo "$COPILOT_ERR"
+  fi
+  echo "${DIM}hint: model=$MODEL effort=${EFFORT:-none}; try DOORMAN_MODEL=… or unset DOORMAN_EFFORT${RESET}"
 }
 
 # Hard-block keyword set. Matches are treated as security/secrets findings.
@@ -141,12 +205,24 @@ get_diff() {
 cmd_doctor() {
   need_copilot
   echo "${GREEN}copilot:${RESET} $COPILOT_BIN"
-  # Skip `copilot --version` (triggers network auth check and can hang).
-  # Just confirm the binary exists and responds to --help.
+  echo "${DIM}  model=$MODEL effort=${EFFORT:-none}${RESET}"
   if "$COPILOT_BIN" --help >/dev/null 2>&1; then
     echo "${GREEN}  responds to --help${RESET}"
   else
     echo "${GOLD}  copilot present but --help failed${RESET}"
+  fi
+  # Real smoke (not just --help) — catches auth / flag mismatches.
+  [[ "$QUIET" == "1" ]] || echo "${DIM}doorman: live smoke prompt…${RESET}"
+  if run_copilot "Reply with exactly: DOORMAN_OK"; then
+    if echo "$COPILOT_OUT" | grep -q "DOORMAN_OK"; then
+      echo "${GREEN}  live prompt OK${RESET}"
+    else
+      echo "${GOLD}  live prompt returned unexpected output:${RESET}"
+      echo "$COPILOT_OUT" | head -5
+    fi
+  else
+    report_copilot_failure "$?"
+    exit 3
   fi
 }
 
@@ -200,26 +276,24 @@ Respond with ONLY the following structure:
   <optional bullet list of specific issues>
 
 Diff to review:
+
+${diff}
 EOF
 )
 
-  local review
-  review=$("$COPILOT_BIN" \
-    -p "$prompt" \
-    -C "$REPO_ROOT" \
-    --reasoning-effort "$EFFORT" \
-    --silent \
-    --no-ask-user \
-    --model auto \
-    --deny-tool='shell(git*)' --deny-tool='shell(*push*)' --deny-tool='shell(*rm*)' \
-    <<< "$diff" 2>/dev/null) || {
-      echo "${RED}doorman: Copilot returned an error${RESET}"
-      echo "$review"
-      exit 3
-    }
+  # Embed diff in -p (more reliable than stdin for Copilot CLI 1.x)
+  if ! run_copilot "$prompt" \
+      --deny-tool='shell(git*)' --deny-tool='shell(*push*)' --deny-tool='shell(*rm*)'; then
+    report_copilot_failure "$?"
+    exit 3
+  fi
 
+  local review="$COPILOT_OUT"
   if [[ -z "$review" ]]; then
     echo "${GOLD}doorman: Copilot returned no output — skipping review${RESET}"
+    if [[ -n "${COPILOT_ERR:-}" ]]; then
+      echo "${DIM}stderr: $COPILOT_ERR${RESET}"
+    fi
     exit 0
   fi
 
@@ -252,13 +326,12 @@ Tone: warm, practical, in-universe. Prefer small focused answers over rewrites. 
 
 The agent asks: $question"
 
-  "$COPILOT_BIN" \
-    -p "$prompt" \
-    -C "$REPO_ROOT" \
-    --reasoning-effort "$EFFORT" \
-    --silent \
-    --model auto \
-    --allow-tool 'read_file' --allow-tool 'search_files' --allow-tool 'list_dir'
+  if ! run_copilot "$prompt" \
+      --allow-tool 'read_file' --allow-tool 'search_files' --allow-tool 'list_dir'; then
+    report_copilot_failure "$?"
+    exit 3
+  fi
+  echo "$COPILOT_OUT"
 }
 
 cmd_refactor() {
@@ -293,17 +366,17 @@ they help; explain why. If a proposed move breaks a relative path, flag it.
 Note from the refactorer: ${note:-no specific aim — general cleanup review.}
 
 Diff to review:
+
+${diff}
 EOF
 )
 
-  "$COPILOT_BIN" \
-    -p "$prompt" \
-    -C "$REPO_ROOT" \
-    --reasoning-effort "$EFFORT" \
-    --silent \
-    --model auto \
-    --deny-tool='shell(git*)' --deny-tool='shell(*push*)' --deny-tool='shell(*rm*)' \
-    <<< "$diff"
+  if ! run_copilot "$prompt" \
+      --deny-tool='shell(git*)' --deny-tool='shell(*push*)' --deny-tool='shell(*rm*)'; then
+    report_copilot_failure "$?"
+    exit 3
+  fi
+  echo "$COPILOT_OUT"
 }
 
 # --- dispatch ---
