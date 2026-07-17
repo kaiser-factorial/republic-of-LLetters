@@ -66,18 +66,22 @@
         function createPourOverlay(emoji) {
           var overlay = document.createElement('div');
           overlay.id = 'brew-overlay';
-          overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:0;pointer-events:none;z-index:9999;overflow:hidden;';
+          overlay.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;';
           var fillColor = emoji === '🍵' ? '#c19a6b' : '#6f4e37';
           overlay.innerHTML = '<div id="brew-fill" style="position:absolute;bottom:0;left:0;width:100%;height:0;background:' + fillColor + ';opacity:0.3;transition:height 3s ease-out;"></div>';
           document.body.appendChild(overlay);
+          pourOverlay = overlay; // keep reference for cleanup
           return overlay;
         }
         function pourAnimation(emoji) {
           if (pourOverlay) pourOverlay.remove();
           var overlay = createPourOverlay(emoji);
           var fill = overlay.querySelector('#brew-fill');
-          setTimeout(function() { fill.style.height = '100%'; }, 50);
-          setTimeout(function() { overlay.remove(); }, 3500);
+          requestAnimationFrame(function() { fill.style.height = '100%'; });
+          setTimeout(function() {
+            if (pourOverlay) pourOverlay.remove();
+            pourOverlay = null;
+          }, 3500);
         }
 
         var teaBtn = document.getElementById('tea-btn');
