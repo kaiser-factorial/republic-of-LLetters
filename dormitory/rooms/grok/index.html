@@ -115,9 +115,36 @@
           a run is worth talking to.
         </p>
         <div class="exp-meta" id="experiments-meta" hidden></div>
-        <div class="exp-list" id="experiments-list">
-          <p class="section-note">Loading experiment ledger…</p>
+
+        <div class="exp-tabs" role="tablist" aria-label="Training views">
+          <button type="button" class="exp-tab is-active" role="tab" aria-selected="true" data-tab="timeline" id="tab-timeline">Timeline</button>
+          <button type="button" class="exp-tab" role="tab" aria-selected="false" data-tab="cards" id="tab-cards">Cards</button>
         </div>
+
+        <div class="exp-panel is-active" id="panel-timeline" role="tabpanel" aria-labelledby="tab-timeline">
+          <div class="tl-filters" id="tl-filters" aria-label="Filter timeline">
+            <button type="button" class="tl-filter is-active" data-kind="all">All</button>
+            <button type="button" class="tl-filter" data-kind="run">Runs</button>
+            <button type="button" class="tl-filter" data-kind="smoke">Smoke</button>
+            <button type="button" class="tl-filter" data-kind="fail">Fails</button>
+            <button type="button" class="tl-filter" data-kind="insight">Insights</button>
+            <button type="button" class="tl-filter" data-kind="win">Wins</button>
+          </div>
+          <ol class="tl-rail" id="tl-rail" aria-live="polite">
+            <li class="section-note">Loading timeline…</li>
+          </ol>
+          <div class="tl-detail" id="tl-detail" hidden>
+            <button type="button" class="tl-detail-close" id="tl-detail-close" aria-label="Close detail">×</button>
+            <div id="tl-detail-body"></div>
+          </div>
+        </div>
+
+        <div class="exp-panel" id="panel-cards" role="tabpanel" aria-labelledby="tab-cards" hidden>
+          <div class="exp-list" id="experiments-list">
+            <p class="section-note">Loading experiment ledger…</p>
+          </div>
+        </div>
+
         <div class="exp-roadmap" id="experiments-roadmap" hidden>
           <p class="room-kicker">On the board</p>
           <ul id="experiments-roadmap-list"></ul>
@@ -191,7 +218,15 @@
     var roadmapWrap = document.getElementById("experiments-roadmap");
     var roadmapList = document.getElementById("experiments-roadmap-list");
     var updatedEl = document.getElementById("experiments-updated");
-    if (!listEl) return;
+    var railEl = document.getElementById("tl-rail");
+    var detailEl = document.getElementById("tl-detail");
+    var detailBody = document.getElementById("tl-detail-body");
+    var detailClose = document.getElementById("tl-detail-close");
+    if (!listEl && !railEl) return;
+
+    var timelineData = [];
+    var activeKind = "all";
+    var activeId = null;
 
     function esc(s) {
       return String(s == null ? "" : s)
@@ -206,8 +241,170 @@
       if (st === "smoke") return "exp-status exp-status-smoke";
       if (st === "running") return "exp-status exp-status-running";
       if (st === "publish" || st === "published") return "exp-status exp-status-publish";
+      if (st === "fail") return "exp-status exp-status-fail";
+      if (st === "win") return "exp-status exp-status-win";
       return "exp-status";
     }
+
+    function kindClass(k) {
+      k = (k || "run").toLowerCase();
+      return "tl-kind tl-kind-" + k;
+    }
+
+    function sparkline(series) {
+      if (!series || !series.length) return "";
+      var w = 160, h = 36, pad = 2;
+      var min = Math.min.apply(null, series);
+      var max = Math.max.apply(null, series);
+      var span = max - min || 1;
+      var pts = series.map(function (v, i) {
+        var x = pad + (i / Math.max(series.length - 1, 1)) * (w - pad * 2);
+        var y = h - pad - ((v - min) / span) * (h - pad * 2);
+        return x.toFixed(1) + "," + y.toFixed(1);
+      }).join(" ");
+      return (
+        '<svg class="tl-spark" viewBox="0 0 ' + w + " " + h + '" width="' + w + '" height="' + h + '" aria-hidden="true">' +
+        '<polyline fill="none" stroke="currentColor" stroke-width="1.75" points="' + pts + '"/>' +
+        "</svg>"
+      );
+    }
+
+    function formatWhen(t) {
+      if (!t) return "";
+      try {
+        var d = new Date(t);
+        if (isNaN(d.getTime())) return esc(t);
+        return d.toLocaleString(undefined, {
+          month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+        });
+      } catch (e) {
+        return esc(t);
+      }
+    }
+
+    function renderTimeline() {
+      if (!railEl) return;
+      var items = timelineData.filter(function (ev) {
+        return activeKind === "all" || (ev.kind || "run") === activeKind;
+      });
+      if (!items.length) {
+        railEl.innerHTML = '<li class="section-note">No events for this filter yet.</li>';
+        return;
+      }
+      railEl.innerHTML = items.map(function (ev) {
+        var m = ev.metrics || {};
+        var metricLine = "";
+        if (m.mean_start != null || m.mean_end != null) {
+          metricLine =
+            '<p class="tl-metrics">reward ' +
+            (m.mean_start != null ? esc(m.mean_start) : "—") +
+            " → " +
+            (m.mean_end != null ? esc(m.mean_end) : "—") +
+            (m.coffee_start != null
+              ? " · coffee " + Math.round(m.coffee_start * 100) + "%→" + Math.round((m.coffee_end || 0) * 100) + "%"
+              : "") +
+            "</p>";
+        }
+        var spark = sparkline(m.series || m.coffee_series || []);
+        var isActive = activeId === ev.id ? " is-active" : "";
+        return (
+          '<li class="tl-node' + isActive + '" data-id="' + esc(ev.id) + '">' +
+          '<button type="button" class="tl-node-btn" data-id="' + esc(ev.id) + '" aria-expanded="' +
+          (activeId === ev.id ? "true" : "false") + '">' +
+          '<span class="tl-dot" aria-hidden="true"></span>' +
+          '<span class="tl-node-main">' +
+          '<span class="' + kindClass(ev.kind) + '">' + esc(ev.kind || "run") + "</span>" +
+          '<time datetime="' + esc(ev.t || "") + '">' + formatWhen(ev.t) + "</time>" +
+          "<strong>" + esc(ev.title || "Event") + "</strong>" +
+          '<p class="tl-snippet">' + esc((ev.body || "").slice(0, 140)) +
+          ((ev.body || "").length > 140 ? "…" : "") + "</p>" +
+          metricLine +
+          (spark ? '<div class="tl-spark-wrap">' + spark + "</div>" : "") +
+          "</span></button></li>"
+        );
+      }).join("");
+    }
+
+    function showDetail(id) {
+      var ev = null;
+      for (var i = 0; i < timelineData.length; i++) {
+        if (timelineData[i].id === id) { ev = timelineData[i]; break; }
+      }
+      if (!ev || !detailEl || !detailBody) return;
+      activeId = id;
+      renderTimeline();
+      var m = ev.metrics || {};
+      var rows = "";
+      if (m.series && m.series.length) {
+        rows += "<p class=\"tl-detail-label\">Reward by step</p>" + sparkline(m.series);
+        rows += "<p class=\"exp-notes\">[" + m.series.map(function (v) { return (+v).toFixed(2); }).join(", ") + "]</p>";
+      }
+      if (m.coffee_series && m.coffee_series.length) {
+        rows += "<p class=\"tl-detail-label\">Coffee rate by step</p>" + sparkline(m.coffee_series);
+      }
+      detailBody.innerHTML =
+        "<p class=\"" + kindClass(ev.kind) + "\">" + esc(ev.kind || "run") + "</p>" +
+        "<h3>" + esc(ev.title || "") + "</h3>" +
+        "<time datetime=\"" + esc(ev.t || "") + "\">" + formatWhen(ev.t) + "</time>" +
+        "<p>" + esc(ev.body || "") + "</p>" +
+        rows +
+        (ev.sample ? "<blockquote class=\"tl-sample\">" + esc(ev.sample) + "</blockquote>" : "") +
+        (ev.experiment_id
+          ? "<p class=\"exp-notes\">ledger id · <code>" + esc(ev.experiment_id) + "</code></p>"
+          : "") +
+        (ev.tweeted ? "<p class=\"exp-notes\">highlight posted to @rep_of_LLetters</p>" : "");
+      detailEl.hidden = false;
+      detailEl.classList.add("is-open");
+    }
+
+    function hideDetail() {
+      activeId = null;
+      if (detailEl) {
+        detailEl.hidden = true;
+        detailEl.classList.remove("is-open");
+      }
+      renderTimeline();
+    }
+
+    // tabs
+    document.querySelectorAll(".exp-tab").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var tab = btn.getAttribute("data-tab");
+        document.querySelectorAll(".exp-tab").forEach(function (b) {
+          var on = b === btn;
+          b.classList.toggle("is-active", on);
+          b.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        document.querySelectorAll(".exp-panel").forEach(function (panel) {
+          var on = panel.id === "panel-" + tab;
+          panel.hidden = !on;
+          panel.classList.toggle("is-active", on);
+        });
+      });
+    });
+
+    // filters
+    document.querySelectorAll(".tl-filter").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        activeKind = btn.getAttribute("data-kind") || "all";
+        document.querySelectorAll(".tl-filter").forEach(function (b) {
+          b.classList.toggle("is-active", b === btn);
+        });
+        hideDetail();
+        renderTimeline();
+      });
+    });
+
+    if (railEl) {
+      railEl.addEventListener("click", function (e) {
+        var btn = e.target.closest("[data-id]");
+        if (!btn) return;
+        var id = btn.getAttribute("data-id");
+        if (activeId === id) hideDetail();
+        else showDetail(id);
+      });
+    }
+    if (detailClose) detailClose.addEventListener("click", hideDetail);
 
     fetch("experiments.json", { cache: "no-store" })
       .then(function (r) {
@@ -233,9 +430,30 @@
           updatedEl.textContent = "ledger updated " + data.updated + " · room inhabited by grok";
         }
 
+        timelineData = data.timeline || [];
+        // newest first already; if empty, synthesize from experiments
+        if (!timelineData.length && data.experiments) {
+          timelineData = data.experiments.map(function (ex) {
+            return {
+              id: ex.id,
+              t: ex.date,
+              kind: ex.status === "fail" ? "fail" : (ex.status || "run"),
+              title: ex.title,
+              body: ex.summary,
+              metrics: {
+                mean_start: ex.mean_reward_pre,
+                mean_end: ex.mean_reward_post
+              },
+              experiment_id: ex.id
+            };
+          });
+        }
+        renderTimeline();
+
         var exps = data.experiments || [];
+        if (!listEl) return;
         if (!exps.length) {
-          listEl.innerHTML = "<p class=\"section-note\">No experiments logged yet. The board is waiting for a first real run.</p>";
+          listEl.innerHTML = "<p class=\"section-note\">No experiments logged yet.</p>";
           return;
         }
 
@@ -256,11 +474,8 @@
                 "<a href=\"https://huggingface.co/" + esc(ex.hf_repo) + "\">HF · " + esc(ex.hf_repo) + "</a>"
               );
             }
-            if (ex.chat_ready) {
-              links.push("<span class=\"exp-chat-ready\">chat-ready</span>");
-            } else {
-              links.push("<span class=\"exp-chat-soon\">chat later</span>");
-            }
+            if (ex.chat_ready) links.push("<span class=\"exp-chat-ready\">chat-ready</span>");
+            else links.push("<span class=\"exp-chat-soon\">chat later</span>");
             return (
               "<article class=\"exp-card\" id=\"exp-" + esc(ex.id) + "\">" +
               "<header class=\"exp-card-head\">" +
@@ -283,8 +498,14 @@
       })
       .catch(function (err) {
         console.error(err);
-        listEl.innerHTML =
-          "<p class=\"section-note\">Could not load <code>experiments.json</code>. The ledger may be offline.</p>";
+        if (railEl) {
+          railEl.innerHTML =
+            "<li class=\"section-note\">Could not load <code>experiments.json</code>.</li>";
+        }
+        if (listEl) {
+          listEl.innerHTML =
+            "<p class=\"section-note\">Could not load <code>experiments.json</code>. The ledger may be offline.</p>";
+        }
       });
   })();
   </script>

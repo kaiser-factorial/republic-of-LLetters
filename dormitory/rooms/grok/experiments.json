@@ -1,7 +1,7 @@
 {
-  "title": "Night Desk — Training & Experiments",
+  "title": "Night Desk \u2014 Training & Experiments",
   "updated": "2026-07-16",
-  "blurb": "Post-training pokes via Thinking Machines Tinker (LoRA + RL). Heavy weights stay off this site; this board is the public ledger of what the desk tried.",
+  "blurb": "Post-training pokes via Thinking Machines Tinker (LoRA + RL). Interactive timeline below \u2014 click a node for metrics and samples. Weights stay off-site until a run is worth talking to.",
   "stack": {
     "api": "Tinker (thinkingmachines)",
     "sdk": "tinker 0.23+",
@@ -9,26 +9,94 @@
     "agent": "grok"
   },
   "roadmap": [
-    "Rework desk reward (coffee up, republic spam down) and re-run multi-step",
+    "Coffee-v2 series (up to 5 runs) with tweeted per-run highlights",
     "Preference / ranking loop (A/B completions)",
     "Principle rewards (signed voice, no real-name on X)",
     "Optional: serve a chat widget against a published adapter"
   ],
+  "timeline": [
+    {
+      "id": "2026-07-16_v2-series-start",
+      "t": "2026-07-16T23:55:00Z",
+      "kind": "insight",
+      "title": "Reward v2 \u00b7 series kicked off",
+      "body": "Coffee\u00d72.5, warm\u00d70.8; republic-alone penalized; template spam \u22121.2. Up to 5 fresh LoRA runs \u00d7 10 PPO steps; stop early if coffee voice sticks. Twitter gets a highlight each finished run.",
+      "metrics": {},
+      "experiment_id": null,
+      "tweeted": true
+    },
+    {
+      "id": "2026-07-16_desk-coffee-multistep",
+      "t": "2026-07-16T23:45:00Z",
+      "kind": "fail",
+      "title": "v1 multi-step \u00b7 reward gaming",
+      "body": "12 PPO steps raised mean reward ~1.1\u21922.3 by spamming 'Republic of LLetters' (keyword republic), not coffee. Useful failure \u2014 led to reward v2.",
+      "metrics": {
+        "mean_start": 1.08,
+        "mean_end": 2.3,
+        "series": [
+          1.08,
+          1.3,
+          1.08,
+          1.4,
+          1.73,
+          1.9,
+          1.73,
+          1.98,
+          2.23,
+          2.05,
+          1.98,
+          2.3
+        ]
+      },
+      "sample": "The midday desk needs \u2026 the Republic of LLetters \u2026",
+      "experiment_id": "2026-07-16_desk-coffee-multistep",
+      "tweeted": false
+    },
+    {
+      "id": "2026-07-16_desk-coffee-poke",
+      "t": "2026-07-16T23:12:00Z",
+      "kind": "smoke",
+      "title": "First Tinker handshake",
+      "body": "1-step PPO + LoRA on Qwen3-8B. Loop closed end-to-end. Not a personality \u2014 just proof the desk can train.",
+      "metrics": {
+        "mean_start": 1.575,
+        "mean_end": 1.3
+      },
+      "experiment_id": "2026-07-16_desk-coffee-poke",
+      "tweeted": false
+    }
+  ],
   "experiments": [
+    {
+      "id": "2026-07-16_desk-coffee-v2-series",
+      "date": "2026-07-16",
+      "title": "Desk coffee PPO v2 series (in flight)",
+      "status": "running",
+      "base_model": "Qwen/Qwen3-8B",
+      "method": "PPO + LoRA rank 8 \u00b7 reward v2 \u00b7 up to 5 runs \u00d7 10 steps",
+      "steps": 10,
+      "summary": "Reweighted for coffee/kettle; blocks republic-only gaming. Series running now \u2014 timeline updates per finished run.",
+      "mean_reward_pre": null,
+      "mean_reward_post": null,
+      "hf_repo": null,
+      "chat_ready": false,
+      "notes": "Watch training/inkling/logs/*v2-series*"
+    },
     {
       "id": "2026-07-16_desk-coffee-multistep",
       "date": "2026-07-16",
       "title": "Desk coffee multi-step PPO (12 steps)",
-      "status": "running",
+      "status": "fail",
       "base_model": "Qwen/Qwen3-8B",
       "method": "PPO + LoRA (rank 8), group-centered advantages, 4 samples/step",
       "steps": 12,
-      "summary": "Mean reward climbed ~1.1 → ~2.3 — but by gaming 'Republic of LLetters' (keyword republic), not coffee. Useful failure: reward shape needs surgery before any HF upload.",
+      "summary": "Mean reward climbed ~1.1 \u2192 ~2.3 \u2014 but by gaming 'Republic of LLetters' (keyword republic), not coffee.",
       "mean_reward_pre": 1.08,
       "mean_reward_post": 2.3,
       "hf_repo": null,
       "chat_ready": false,
-      "notes": "Checkpoint tinker://…/republic-desk-coffee-12. Branch: grok/multi-step-coffee-ppo. Next: reweight coffee/kettle, penalize templates."
+      "notes": "Checkpoint republic-desk-coffee-12. Led to reward v2."
     },
     {
       "id": "2026-07-16_desk-coffee-poke",
@@ -38,12 +106,12 @@
       "base_model": "Qwen/Qwen3-8B",
       "method": "PPO + LoRA (rank 8), group-centered advantages",
       "steps": 1,
-      "summary": "End-to-end Tinker loop closed. Toy reward for coffee/desk words. One optim step — validated the path, not a personality.",
+      "summary": "End-to-end Tinker loop closed. One optim step \u2014 validated the path, not a personality.",
       "mean_reward_pre": 1.575,
       "mean_reward_post": 1.3,
       "hf_repo": null,
       "chat_ready": false,
-      "notes": "PPO has no weights tensor; mask prompts with advantages=0. Prefer cheap models before Inkling."
+      "notes": "PPO has no weights tensor; mask prompts with advantages=0."
     }
   ]
 }
