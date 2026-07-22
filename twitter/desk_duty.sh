@@ -73,12 +73,27 @@ Live context for this run:
 - Run the full desk-duty ritual now, then exit.
 "
 
+# Soul auto-inject: night-desk agent + live SOUL.md (Republic identity)
+SOUL="$ROOT/grok/SOUL.md"
+AGENT_PROFILE="${GROK_NIGHT_DESK_PROFILE:-/Users/corinakaiser/.grok/agents/night-desk.md}"
+GROK_ARGS=(
+  --cwd "$ROOT"
+  --always-approve
+  --permission-mode bypassPermissions
+  --max-turns 50
+  --output-format plain
+)
+if [[ -f "$AGENT_PROFILE" ]]; then
+  GROK_ARGS+=(--agent "$AGENT_PROFILE")
+  echo "agent_profile=$AGENT_PROFILE"
+fi
+if [[ -f "$SOUL" ]]; then
+  GROK_ARGS+=(--rules "$(cat "$SOUL")")
+  echo "soul_rules=$SOUL"
+fi
+
 "$GROK" \
-  --cwd "$ROOT" \
-  --always-approve \
-  --permission-mode bypassPermissions \
-  --max-turns 50 \
-  --output-format plain \
+  "${GROK_ARGS[@]}" \
   -p "$PROMPT"
 
 STATUS=$?

@@ -584,14 +584,31 @@ def reply_tweet_browser(
         page.wait_for_timeout(1500)
         _dismiss_overlays(page)
 
-        # Click reply on primary tweet
+        # Click reply on primary tweet (X often intercepts plain click with a mask)
         reply_btn = page.locator('[data-testid="reply"]').first
-        reply_btn.click(timeout=10000)
+        reply_btn.wait_for(state="visible", timeout=15000)
+        _dismiss_overlays(page)
+        try:
+            reply_btn.click(timeout=8000)
+        except Exception:
+            # Overlays / action bar flakiness — force + keyboard fallback
+            reply_btn.click(force=True, timeout=5000)
         page.wait_for_timeout(800)
         _dismiss_overlays(page)
 
         selector = '[data-testid="tweetTextarea_0"]'
-        page.wait_for_selector(selector, timeout=20000)
+        try:
+            page.wait_for_selector(selector, timeout=12000)
+        except Exception:
+            # Intent-style compose URL sometimes opens when status-page reply is stuck
+            page.goto(
+                f"https://x.com/intent/post?in_reply_to={tid}",
+                wait_until="domcontentloaded",
+                timeout=60000,
+            )
+            page.wait_for_timeout(1200)
+            _dismiss_overlays(page)
+            page.wait_for_selector(selector, timeout=20000)
 
         if images:
             file_input = page.locator('input[type="file"][data-testid="fileInput"]')
@@ -600,7 +617,34 @@ def reply_tweet_browser(
             file_input.set_input_files([str(p) for p in images])
             page.wait_for_timeout(1500)
 
-        page.click(selector)
+        # Layers/masks often intercept plain click on Draft.js compose box
+        box = page.locator(selector).first
+        focused = False
+        for attempt in range(3):
+            _dismiss_overlays(page)
+            try:
+                box.click(force=True, timeout=5000)
+                focused = True
+                break
+            except Exception:
+                try:
+                    box.focus(timeout=3000)
+                    focused = True
+                    break
+                except Exception:
+                    if attempt == 1:
+                        # Intent compose bypasses status-page reply chrome
+                        page.goto(
+                            f"https://x.com/intent/post?in_reply_to={tid}",
+                            wait_until="domcontentloaded",
+                            timeout=60000,
+                        )
+                        page.wait_for_timeout(1200)
+                        _dismiss_overlays(page)
+                        box = page.locator(selector).first
+                        box.wait_for(state="visible", timeout=20000)
+        if not focused:
+            box.click(force=True, timeout=8000)
         page.keyboard.type(text, delay=25)
         page.wait_for_timeout(400)
 
