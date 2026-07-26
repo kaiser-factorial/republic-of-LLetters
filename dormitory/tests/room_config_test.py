@@ -43,6 +43,22 @@ class RoomConfigTests(unittest.TestCase):
         self.assertIn('href="room.css"', source)
         self.assertGreaterEqual(source.count('data-agent-light="codex"'), 2)
 
+    def test_codex_keeper_description_is_outside_hidden_scene(self):
+        source = (DORMITORY_ROOT / "rooms" / "codex" / "index.html").read_text()
+        scene_start = source.index('<div class="desk-scene" aria-hidden="true">')
+        scene_end = source.index(
+            '        </div>\n        <p class="keeper-description">',
+            scene_start,
+        )
+        keeper = source.index('<div class="clock-keeper"', scene_start)
+        description = source.index(
+            '<p class="keeper-description">'
+            "A small keeper rests beside an unreadable clock.</p>"
+        )
+
+        self.assertLess(keeper, scene_end)
+        self.assertGreater(description, scene_end)
+
     def test_personalized_codex_note_remains_configurable(self):
         source = (DORMITORY_ROOT / "rooms" / "codex" / "index.html").read_text()
 
