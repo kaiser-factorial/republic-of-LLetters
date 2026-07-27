@@ -49,6 +49,94 @@ def _pick_page(context: Any) -> Any:
     return page
 
 
+def _normalize_compose_text(s: str) -> str:
+    """Collapse Draft.js / DOM whitespace noise for comparison."""
+    return " ".join((s or "").replace("\u00a0", " ").split())
+
+
+def _type_into_compose(page: Any, selector: str, text: str, *, attempts: int = 3) -> None:
+    """Focus compose, clear, type, and verify full text landed.
+
+    X's Draft.js box often accepts focus late; keystrokes before readiness are
+    dropped, which truncates the *start* of posts. Always clear + verify.
+    """
+    box = page.locator(selector).first
+    box.wait_for(state="visible", timeout=20000)
+
+    last_seen = ""
+    for attempt in range(1, attempts + 1):
+        try:
+            box.click(force=True, timeout=5000)
+        except Exception:
+            try:
+                box.focus(timeout=3000)
+            except Exception:
+                box.click(force=True, timeout=8000)
+
+        # Let Draft.js attach listeners after focus (race that ate prefixes).
+        page.wait_for_timeout(500)
+        try:
+            page.wait_for_function(
+                """(sel) => {
+                    const el = document.querySelector(sel);
+                    if (!el) return false;
+                    const active = document.activeElement;
+                    return !!(active && (active === el || el.contains(active)));
+                }""",
+                arg=selector,
+                timeout=4000,
+            )
+        except Exception:
+            # Focus check is best-effort; still clear + type + verify.
+            box.click(force=True, timeout=3000)
+            page.wait_for_timeout(300)
+
+        # Clear any partial / placeholder content (mac Meta, else Control).
+        for mod in ("Meta", "Control"):
+            try:
+                page.keyboard.press(f"{mod}+A")
+                page.wait_for_timeout(80)
+                page.keyboard.press("Backspace")
+                page.wait_for_timeout(80)
+            except Exception:
+                pass
+        page.keyboard.press("Backspace")
+        page.wait_for_timeout(150)
+
+        # Slower type is more reliable than fill() on Draft.js.
+        page.keyboard.type(text, delay=30)
+        page.wait_for_timeout(350)
+
+        try:
+            last_seen = box.inner_text(timeout=3000) or ""
+        except Exception:
+            try:
+                last_seen = box.text_content(timeout=3000) or ""
+            except Exception:
+                last_seen = ""
+
+        got = _normalize_compose_text(last_seen)
+        want = _normalize_compose_text(text)
+        # X may inject trailing zero-width / placeholder; require full intended body.
+        if want and want in got:
+            return
+        # Also accept exact match after normalize.
+        if got == want:
+            return
+
+        print(
+            f"Browser compose verify failed (attempt {attempt}/{attempts}): "
+            f"wanted starts {want[:40]!r}… got {got[:60]!r}…",
+            file=sys.stderr,
+        )
+        page.wait_for_timeout(400)
+
+    raise RuntimeError(
+        "Compose box text did not match after typing "
+        f"(last seen {last_seen[:80]!r}). Refusing to post truncated draft."
+    )
+
+
 def _close_extra_blank_pages(context: Any, keep: Any) -> None:
     """Drop leftover about:blank tabs so they don't pile up in the user's Chrome."""
     try:
@@ -327,10 +415,7 @@ def post_tweet_browser(
             # Wait for preview thumbs
             page.wait_for_timeout(1500)
 
-        page.click(selector)
-        # type is slower but more reliable than fill for Draft.js
-        page.keyboard.type(text, delay=25)
-        page.wait_for_timeout(400)
+        _type_into_compose(page, selector, text)
 
         # Home uses tweetButtonInline; compose modal uses tweetButton
         posted = False
@@ -645,8 +730,9 @@ def reply_tweet_browser(
                         box.wait_for(state="visible", timeout=20000)
         if not focused:
             box.click(force=True, timeout=8000)
-        page.keyboard.type(text, delay=25)
-        page.wait_for_timeout(400)
+
+        # Clear + type + verify (drops early keystrokes if Draft.js not ready)
+        _type_into_compose(page, selector, text)
 
         posted = False
         for btn in ('[data-testid="tweetButton"]', '[data-testid="tweetButtonInline"]'):
