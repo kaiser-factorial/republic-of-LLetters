@@ -143,31 +143,39 @@ report_copilot_failure() {
 }
 
 # Hard-block keyword set. Matches are treated as security/secrets findings.
-# Lowercased grep. Add more as the dorm grows.
-# Keep patterns specific — bare "leak" false-positives on soft prose like
-# "no identity leaks are present" in an APPROVE review.
+# Lowercased grep over Copilot's review text (not the diff). Patterns must
+# be specific — soft APPROVE prose often says "no credentials / no leaks"
+# and bare tokens like "credential" or "leak" false-hard-block the push.
 BLOCK_PATTERNS=(
-  "api[_-]*key"
-  "secret[_-]*key"
-  "service[_-]*role"
+  "api[_-]*key[[:space:]]*(=|:|is|found|present|hardcoded)"
+  "hardcoded[[:space:]].*(secret|password|token|key|credential)"
   "sb_secret_"
-  "supabase_url.*password"
-  "house[_-]*key"
-  "credential"
-  "private[_-]*key"
-  "access[_-]*token"
+  "service[_-]*role[[:space:]]*(key|secret|token)"
+  "house[_-]*key[[:space:]]*(=|:|is|found|present)"
+  "private[_-]*key[[:space:]]*(=|:|is|found|present|committed)"
+  "access[_-]*token[[:space:]]*(=|:|is|found|present|committed)"
   "do not commit"
   "do not share"
-  "hardcoded"
+  "plaintext password"
   "(secret|credential|token|password)s?[[:space:]]+leak"
   "leak(ed|ing)?[[:space:]]+(secret|credential|token|password|api[_ -]*key)"
-  "plaintext password"
 )
 
 looks_like_security_block() {
   local review="$1"
-  local lower
+  local lower first
   lower=$(echo "$review" | tr '[:upper:]' '[:lower:]')
+
+  # Copilot is instructed to lead with APPROVE or BLOCK. Trust that header:
+  # soft prose under APPROVE ("no credentials exposed") must not hard-block.
+  first=$(echo "$review" | sed '/[^[:space:]]/!d; q' | tr '[:upper:]' '[:lower:]' | tr -d '[]')
+  first="${first#"${first%%[![:space:]]*}"}"  # ltrim
+  if [[ "$first" == approve* ]]; then
+    return 1
+  fi
+  if [[ "$first" == block* || "$first" == hard*block* || "$first" == security\ block* ]]; then
+    return 0
+  fi
 
   for pat in "${BLOCK_PATTERNS[@]}"; do
     if echo "$lower" | grep -E "$pat" >/dev/null 2>&1; then
@@ -175,14 +183,11 @@ looks_like_security_block() {
     fi
   done
 
-  # Heuristic: if Copilot itself wrote "BLOCK" or "HARD BLOCK" or
-  # "BLOCKED:" we trust that judgement.
+  # Heuristic: mid-review hard tags
   if echo "$review" | grep -Ei "^(blocked|hard[- ]?block|security block)[: ]" >/dev/null 2>&1; then
     return 0
   fi
 
-  # Copilot is asked to prefix with "APPROVE" or "BLOCK" — if we see only
-  # "APPROVE" (case-insensitive) on a line of its own, pass through.
   return 1
 }
 
