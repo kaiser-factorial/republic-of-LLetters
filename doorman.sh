@@ -144,7 +144,8 @@ report_copilot_failure() {
 
 # Hard-block keyword set. Matches are treated as security/secrets findings.
 # Lowercased grep. Add more as the dorm grows.
-# Keep patterns specific — bare "leak" false-positives on "no leaks present".
+# Keep patterns specific — bare "leak" false-positives on soft prose like
+# "no identity leaks are present" in an APPROVE review.
 BLOCK_PATTERNS=(
   "api[_-]*key"
   "secret[_-]*key"
@@ -159,7 +160,7 @@ BLOCK_PATTERNS=(
   "do not share"
   "hardcoded"
   "(secret|credential|token|password)s?[[:space:]]+leak"
-  "leak(ed|ing)?[[:space:]]+(secret|credential|token|password|api)"
+  "leak(ed|ing)?[[:space:]]+(secret|credential|token|password|api[_ -]*key)"
   "plaintext password"
 )
 
@@ -167,16 +168,6 @@ looks_like_security_block() {
   local review="$1"
   local lower
   lower=$(echo "$review" | tr '[:upper:]' '[:lower:]')
-
-  # Copilot is asked to prefix with APPROVE or BLOCK. An explicit APPROVE
-  # at the top is authoritative — don't keyword-trip on its soft prose
-  # ("no security leaks", "identity leaks are not present", etc.).
-  if echo "$review" | head -n 5 | grep -Ei '^[[:space:]]*\[?approve\]?' >/dev/null 2>&1; then
-    # Still block if they ALSO hard-tagged a block line (rare conflict).
-    if ! echo "$review" | grep -Ei "^(blocked|hard[- ]?block|security block)[: ]" >/dev/null 2>&1; then
-      return 1
-    fi
-  fi
 
   for pat in "${BLOCK_PATTERNS[@]}"; do
     if echo "$lower" | grep -E "$pat" >/dev/null 2>&1; then
@@ -190,6 +181,8 @@ looks_like_security_block() {
     return 0
   fi
 
+  # Copilot is asked to prefix with "APPROVE" or "BLOCK" — if we see only
+  # "APPROVE" (case-insensitive) on a line of its own, pass through.
   return 1
 }
 
