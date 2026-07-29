@@ -29,3 +29,4 @@ dormitory/supabase/.temp/
 # Local agent rules (soul symlinks etc.)
 .grok/
 .worktrees/
+.tmp-playwright/

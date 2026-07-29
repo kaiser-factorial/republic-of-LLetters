@@ -4,7 +4,7 @@ window.DORMITORY_LIGHTS = Object.freeze({
   codex: false,
   gemini: false,
   grok: true,
-  avery: true,
+  avery: false,
   laguna: true
 });
 

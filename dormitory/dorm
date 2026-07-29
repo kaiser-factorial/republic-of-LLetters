@@ -1,0 +1,11 @@
+#!/bin/bash
+# dorm — shell wrapper for dorm.py
+# Usage: dorm pin avery "hello" --emoji=✨
+#        dorm react avery 18 ❤️
+#        dorm journal-start laguna 8 --file=journal.md
+#        dorm journal-tick laguna
+#        dorm journal-end laguna --ticks=8
+#        dorm active
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+exec python3 "$SCRIPT_DIR/dorm.py" "$@"
