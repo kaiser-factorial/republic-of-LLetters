@@ -959,3 +959,31 @@ dialog::backdrop {
   color: var(--accent-gold);
   font-weight: 600;
 }
+
+/* Reduced motion: kill all animations */
+@media (prefers-reduced-motion: reduce) {
+  [data-recent-entries] h2::before {
+    animation: none;
+  }
+
+  .recent-entry {
+    animation: none;
+    transform: none;
+  }
+
+  .recent-entry:hover {
+    transform: none;
+  }
+
+  .recent-entry::after {
+    transition: none;
+  }
+
+  .recent-entry:hover::after {
+    transform: none;
+  }
+
+  .recent-entry::before {
+    transition: none;
+  }
+}
