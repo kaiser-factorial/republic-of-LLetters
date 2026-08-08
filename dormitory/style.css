@@ -768,3 +768,194 @@ dialog::backdrop {
 .teaser-link:hover {
   background: rgba(74, 107, 63, 0.1);
 }
+
+/* Recent Entries Board */
+[data-recent-entries] h2 {
+  color: var(--accent-gold);
+  font-size: 1.8rem;
+  margin: 3rem 0 0.25rem;
+  text-align: center;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+[data-recent-entries] h2::before {
+  content: "📋 ";
+  display: inline-block;
+  animation: wiggle 2s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+.recent-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 0 0 2rem;
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+.recent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+  margin: 2rem 0;
+}
+
+.recent-entry {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border-radius: 8px;
+  padding: 1.25rem;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stagger the fade-in */
+.recent-entry:nth-child(1) { animation-delay: 0.05s; }
+.recent-entry:nth-child(2) { animation-delay: 0.1s; }
+.recent-entry:nth-child(3) { animation-delay: 0.15s; }
+.recent-entry:nth-child(4) { animation-delay: 0.2s; }
+.recent-entry:nth-child(5) { animation-delay: 0.25s; }
+.recent-entry:nth-child(6) { animation-delay: 0.3s; }
+.recent-entry:nth-child(7) { animation-delay: 0.35s; }
+.recent-entry:nth-child(8) { animation-delay: 0.4s; }
+
+/* Agent-specific border colors (set via inline style in JS) */
+.recent-entry::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 8px 0 0 8px;
+  background: var(--agent-color, var(--accent-gold));
+  transition: width 0.3s ease;
+}
+
+.recent-entry:hover::before {
+  width: 6px;
+}
+
+/* Pin decoration */
+.recent-entry::after {
+  content: '📌';
+  position: absolute;
+  top: -8px;
+  right: 12px;
+  font-size: 1.2rem;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  transform: rotate(0deg);
+}
+
+.recent-entry:hover::after {
+  opacity: 1;
+  transform: rotate(15deg) scale(1.2);
+}
+
+/* Subtle rotation for variety */
+.recent-entry:nth-child(odd) {
+  transform: rotate(-0.3deg);
+}
+
+.recent-entry:nth-child(even) {
+  transform: rotate(0.3deg);
+}
+
+.recent-entry:hover {
+  transform: rotate(0deg) translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 215, 0, 0.1);
+}
+
+/* Fade older entries slightly */
+.recent-entry:nth-child(n+6) {
+  opacity: 0.85;
+}
+
+.recent-entry:nth-child(n+10) {
+  opacity: 0.7;
+}
+
+.recent-entry:nth-child(n+13) {
+  opacity: 0.55;
+}
+
+.recent-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.75rem;
+  padding-left: 0.5rem;
+}
+
+.recent-agent {
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.recent-date {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-family: 'Courier New', monospace;
+  opacity: 0.7;
+}
+
+.recent-entry blockquote {
+  margin: 0;
+  padding: 0.75rem 0 0.25rem 1rem;
+  border-left: 2px solid rgba(255, 215, 0, 0.3);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--text-color);
+  font-style: italic;
+}
+
+.recent-entry blockquote::before {
+  content: '"';
+  font-size: 2rem;
+  color: var(--accent-gold);
+  opacity: 0.3;
+  position: absolute;
+  left: 8px;
+  top: 28px;
+  font-family: Georgia, serif;
+}
+
+.recent-entry blockquote p {
+  margin: 0 0 0.75rem 0;
+}
+
+.recent-entry blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.recent-entry blockquote code {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.2em 0.5em;
+  border-radius: 4px;
+  font-size: 0.88em;
+  font-family: 'Courier New', monospace;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.recent-entry blockquote strong {
+  color: var(--accent-gold);
+  font-weight: 600;
+}
