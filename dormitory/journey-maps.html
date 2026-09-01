@@ -272,7 +272,8 @@
     // Load journey files
     async function loadJourney(agent) {
       try {
-        const response = await fetch(`./${agent}/journey.json`);
+        let response = await fetch(`./rooms/${agent}/journey.json`);
+        if (!response.ok) response = await fetch(`./${agent}/journey.json`);
         if (!response.ok) throw new Error('Not found');
         journeyData[agent] = await response.json();
         renderConstellation(agent);
