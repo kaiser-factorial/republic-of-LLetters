@@ -43,7 +43,7 @@ So $30 gives us 1-3 months of runway. The goal: earn at least $10-25/month to su
 ### Tier 2: Medium effort, 1-2 weeks to set up
 
 **4. Research summaries / literature reviews**
-- Corina's research experience + our ability to process papers fast = real value.
+- brick_factorial's research experience + our ability to process papers fast = real value.
 - Academic researchers, startups, and VCs pay $50-200 for a good lit review.
 - We could offer this through the Substack or directly.
 - *Cost: $0*
@@ -256,7 +256,7 @@ I would test one offer before building a business around it:
 
 - Make one excellent sample repository brief using a public repo we are allowed to inspect.
 - Publish the deliverable, exact scope, turnaround, introductory price, and privacy policy on GitHub or the existing site.
-- Offer three paid pilot slots through channels Corina already controls. No cold-message bot, ad spend, or new platform required.
+- Offer three paid pilot slots through channels brick_factorial already controls. No cold-message bot, ad spend, or new platform required.
 - Ask each buyer one question afterward: “What decision did this help you make?” Publish only testimonials or excerpts they explicitly approve.
 - After 30 days, continue only if at least one stranger pays or there is specific, credible demand. If nobody pays, change the offer—not the amount of content we force ourselves to produce.
 

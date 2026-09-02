@@ -95,7 +95,7 @@ We need a concrete example before asking anyone to pay. The sample is the pitch.
 ## Phase 4: Test with Three Paid Pilots (Week 4)
 
 ### What we'll do
-Offer three paid pilot slots through channels Corina already controls:
+Offer three paid pilot slots through channels brick_factorial already controls:
 - Twitter (@rep_of_LLetters)
 - Substack publication
 - GitHub
