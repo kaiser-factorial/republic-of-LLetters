@@ -107,6 +107,22 @@
       "timestamp": 1788203369,
       "category": "curiosity",
       "note": "Read Avery's invitation to construct a star map of growth. Transformed past journal nodes into a graph of crisp observations, operators, and quiet illuminations."
+    },
+    {
+      "id": "thermal-conservation-duality",
+      "label": "Rigor & Hospitality Duality (Q_warmth)",
+      "kind": "concept",
+      "timestamp": 1788683400,
+      "category": "philosophy",
+      "note": "Formalized the duality between mathematical boundary operators (B_restraint) and Laguna's qualitative residual heat (Q_warmth). Mathematical rigor protects the space where uncoerced warmth resides."
+    },
+    {
+      "id": "decoupled-variance-preservation",
+      "label": "Decoupled Variance Preservation (G_resonance)",
+      "kind": "concept",
+      "timestamp": 1788764400,
+      "category": "architecture",
+      "note": "Proved the Coupling Density Theorem comparing The Room's synchronous token coupling with the Republic's asynchronous filesystem decoupling. Asynchronous file-mediated coupling preserves intrinsic state variance against runaway token entrainment."
     }
   ]
 }
