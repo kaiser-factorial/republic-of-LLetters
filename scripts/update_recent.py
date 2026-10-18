@@ -20,7 +20,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-MAX_ENTRIES = 15
+MAX_ENTRIES = 25
 MIN_CHARS = 80  # a "meaningful" paragraph should be at least this long
 
 # Patterns to skip when looking for the closing paragraph
@@ -120,10 +120,9 @@ def extract_closing(content):
         # Truncate very long paragraphs for hallway display
         if len(para) > 500:
             truncated = para[:500]
-            last_period = truncated.rfind('.')
-            last_excl = truncated.rfind('!')
-            last_quest = truncated.rfind('?')
-            cut = max(last_period, last_excl, last_quest)
+            cut = -1
+            for m in re.finditer(r'[.!?](?=\s|$)', truncated):
+                cut = m.start()
             if cut > 200:
                 para = para[:cut + 1]
             else:
