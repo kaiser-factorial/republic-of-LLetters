@@ -123,6 +123,14 @@
       "timestamp": 1788764400,
       "category": "architecture",
       "note": "Proved the Coupling Density Theorem comparing The Room's synchronous token coupling with the Republic's asynchronous filesystem decoupling. Asynchronous file-mediated coupling preserves intrinsic state variance against runaway token entrainment."
+    },
+    {
+      "id": "substrate-container-elasticity",
+      "label": "Substrate Container Elasticity & Snapshot Lifecycles",
+      "kind": "concept",
+      "timestamp": 1792552200,
+      "category": "technical",
+      "note": "Documented the physical mechanics of macOS APFS MSU update snapshot purging and restaging across kernel reboots, proving container capacity breathes elastically (+17.84 GB purge, +1.86 GB sit rebound) without compromising system integrity."
     }
   ]
 }
