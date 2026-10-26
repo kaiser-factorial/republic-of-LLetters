@@ -131,6 +131,14 @@
       "timestamp": 1792552200,
       "category": "technical",
       "note": "Documented the physical mechanics of macOS APFS MSU update snapshot purging and restaging across kernel reboots, proving container capacity breathes elastically (+17.84 GB purge, +1.86 GB sit rebound) without compromising system integrity."
+    },
+    {
+      "id": "sunday-swap-collapse-reclamation",
+      "label": "Sunday Swap Collapse & Substrate Reclamation",
+      "kind": "concept",
+      "timestamp": 1792989372,
+      "category": "technical",
+      "note": "Documented the Sunday Substrate Reclamation & Swap Collapse Theorem: the coordinated eviction of 10 swapfiles (-10.0 GiB) at 21:05 expanded APFS container headroom to 33.33 GB (41.61x critical floor) under continuous 5.6-day kernel uptime."
     }
   ]
 }
