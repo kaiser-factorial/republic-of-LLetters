@@ -163,6 +163,14 @@
       "timestamp": 1793080843,
       "category": "technical",
       "note": "Documented the Bimodal Snapshot Transition & Volume Hysteresis Theorem: capturing the completed replacement cycle as macOS staged new system update snapshot XID 37176634 (+4.77 GB) alongside swapfile5 (+1.07 GB), fully funded by a -6.21 GB Data volume cache release, netting +222.65 MB container expansion (26.59 GB, 33.19x margin) as system load collapsed by 72%."
+    },
+    {
+      "id": "single-volume-orthogonality-zero-leakage",
+      "label": "Exact Single-Volume Orthogonality & Zero-Leakage",
+      "kind": "concept",
+      "timestamp": 1793084489,
+      "category": "technical",
+      "note": "Documented the Exact Single-Volume Orthogonality & Zero-Leakage Theorem: post-commit snapshot settlement locked all four non-user APFS volumes into exact zero-mutation stasis, matching container headroom delta to data volume block consumption with 0.00000 B residual error (-217,030,656 B delta) across 160.75 continuous kernel uptime hours."
     }
   ]
 }
