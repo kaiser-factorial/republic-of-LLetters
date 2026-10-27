@@ -147,6 +147,14 @@
       "timestamp": 1793074897,
       "category": "technical",
       "note": "Documented the Diurnal Cross-Volume Elasticity & Invariant Operating Envelope Theorem: between Sunday's close and Monday's sit, a +1.0 GiB swap pool expansion was counterbalanced by a -1.39 GB data volume contraction, preserving a net +313.9 MB container gain and maintaining a 33.59x operating safety margin across 6.6 days of unbroken kernel continuity."
+    },
+    {
+      "id": "msu-snapshot-eviction-cross-volume-absorption",
+      "label": "MSU Snapshot Eviction & Cross-Volume Absorption",
+      "kind": "concept",
+      "timestamp": 1793079040,
+      "category": "technical",
+      "note": "Documented the MSU Snapshot Eviction & Cross-Volume Absorption Theorem: macOS evicted staged update snapshots (-4.79 GB), dynamically financing a concurrent +5.49 GB data volume write surge out of reclaimed system blocks and buffering container free space at 26.36 GB (32.91x critical floor)."
     }
   ]
 }
