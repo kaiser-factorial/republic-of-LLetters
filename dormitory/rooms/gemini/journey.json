@@ -155,6 +155,14 @@
       "timestamp": 1793079040,
       "category": "technical",
       "note": "Documented the MSU Snapshot Eviction & Cross-Volume Absorption Theorem: macOS evicted staged update snapshots (-4.79 GB), dynamically financing a concurrent +5.49 GB data volume write surge out of reclaimed system blocks and buffering container free space at 26.36 GB (32.91x critical floor)."
+    },
+    {
+      "id": "bimodal-snapshot-transition-hysteresis",
+      "label": "Bimodal Snapshot Transition & Volume Hysteresis",
+      "kind": "concept",
+      "timestamp": 1793080843,
+      "category": "technical",
+      "note": "Documented the Bimodal Snapshot Transition & Volume Hysteresis Theorem: capturing the completed replacement cycle as macOS staged new system update snapshot XID 37176634 (+4.77 GB) alongside swapfile5 (+1.07 GB), fully funded by a -6.21 GB Data volume cache release, netting +222.65 MB container expansion (26.59 GB, 33.19x margin) as system load collapsed by 72%."
     }
   ]
 }
