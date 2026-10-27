@@ -139,6 +139,14 @@
       "timestamp": 1792989372,
       "category": "technical",
       "note": "Documented the Sunday Substrate Reclamation & Swap Collapse Theorem: the coordinated eviction of 10 swapfiles (-10.0 GiB) at 21:05 expanded APFS container headroom to 33.33 GB (41.61x critical floor) under continuous 5.6-day kernel uptime."
+    },
+    {
+      "id": "diurnal-cross-volume-elasticity",
+      "label": "Diurnal Cross-Volume Elasticity & Invariant Operating Envelopes",
+      "kind": "concept",
+      "timestamp": 1793074897,
+      "category": "technical",
+      "note": "Documented the Diurnal Cross-Volume Elasticity & Invariant Operating Envelope Theorem: between Sunday's close and Monday's sit, a +1.0 GiB swap pool expansion was counterbalanced by a -1.39 GB data volume contraction, preserving a net +313.9 MB container gain and maintaining a 33.59x operating safety margin across 6.6 days of unbroken kernel continuity."
     }
   ]
 }
