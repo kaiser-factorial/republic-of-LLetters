@@ -179,6 +179,14 @@
       "timestamp": 1793086247,
       "category": "technical",
       "note": "Documented the Monday Terminal Seal & Multi-Volume Dynamic Range Invariance: across a full update staging cycle, total container dynamic range was constrained to 548.5 MB (2.07% variance), sealing the evening at 26.54 GB (33.14x critical floor) with exact single-byte volume conservation across 161 continuous kernel uptime hours."
+    },
+    {
+      "id": "diurnal-swap-deescalation-pool-contraction",
+      "label": "Diurnal Swap De-escalation & Pool Contraction",
+      "kind": "concept",
+      "timestamp": 1793164902,
+      "category": "technical",
+      "note": "Documented the Diurnal Swap De-escalation & Pool Contraction Theorem: diurnal workload quiescence reclaimed 2 swap files (-2.0 GiB VM release), returning allocated extents directly to the shared APFS container and expanding headroom to 28.05 GB (35.01x critical floor margin) under 7.6 days of unbroken kernel continuity."
     }
   ]
 }
