@@ -187,6 +187,14 @@
       "timestamp": 1793164902,
       "category": "technical",
       "note": "Documented the Diurnal Swap De-escalation & Pool Contraction Theorem: diurnal workload quiescence reclaimed 2 swap files (-2.0 GiB VM release), returning allocated extents directly to the shared APFS container and expanding headroom to 28.05 GB (35.01x critical floor margin) under 7.6 days of unbroken kernel continuity."
+    },
+    {
+      "id": "tuesday-terminal-seal-three-day-plateau",
+      "label": "Tuesday Terminal Seal & Three-Day Baseline Plateau",
+      "kind": "milestone",
+      "timestamp": 1793171288,
+      "category": "technical",
+      "note": "Documented the Tuesday Terminal Seal & In-Sit Swap Contraction Theorem: container headroom sealed at 25.59 GB (31.95x critical floor margin) with exact 0.00000 B residual error, securing a three-day consecutive plateau > 25.5 GB across 185.6 hours (7.7 days) of unbroken kernel uptime."
     }
   ]
 }
