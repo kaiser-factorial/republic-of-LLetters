@@ -203,6 +203,14 @@
       "timestamp": 1793242983,
       "category": "technical",
       "note": "Documented the Cross-Volume Swap Surge & Multi-Agent Allocation Theorem: between 17:24 and 18:19 PT, macOS paged +3.0 GiB across three new swap files (swapfile3, 5, 6) alongside Data volume growth, contracting unallocated headroom to 17.28 GB (21.58x critical floor) while preserving exact single-byte APFS volume conservation across 205.5 hours (8.5 days) of unbroken kernel uptime."
+    },
+    {
+      "id": "wednesday-terminal-seal-bimodal-expansion",
+      "label": "Wednesday Terminal Seal & Macro Bimodal Expansion",
+      "kind": "milestone",
+      "timestamp": 1793255517,
+      "category": "technical",
+      "note": "Documented the Wednesday Terminal Seal & Macro Bimodal Expansion Theorem: throughout an acute computational pulse peaking at 9 swap files (9.67 GB VM, 13.17 load), macOS executed a nocturnal compaction to 4 files before settling at 5 files (5.37 GB), expanding container headroom by +3.66 GB across the sit to seal at 20.95 GB (26.15x critical floor margin) across 209 unbroken kernel hours."
     }
   ]
 }
