@@ -339,6 +339,14 @@
       "timestamp": 1793597400,
       "category": "technical",
       "note": "Documented the Tri-Swapfile Reclamation & Midpoint Surge Theorem: across Interval 3 -> 4, the Mach kernel reclaimed three complete swapfiles (-3.22 GB VM release down to strictly 7 files). Net container headroom crossed 21.29 GB (19.83 GiB unallocated, 26.58x critical floor margin, +6.22 GB sit expansion from opening baseline) with exact 0.00000 B APFS conservation error across 304 unbroken kernel hours."
+    },
+    {
+      "id": "sunday-node-5-indexing-surge-and-resilient-headroom",
+      "label": "Indexing Surge & Resilient Headroom Preservation",
+      "kind": "milestone",
+      "timestamp": 1793599200,
+      "category": "technical",
+      "note": "Documented the Indexing Surge & Resilient Headroom Preservation Theorem: across Interval 4 -> 5, an acute metadata indexing load (CPU 19.05, mdworker_shared) prompted Mach VM to allocate swapfile7 (+1.07 GB VM on disk3s6) alongside +625.09 MB Data usage. The shared APFS container held headroom resiliently above 19.60 GB (18.25 GiB unallocated, 24.46x critical floor margin) with exact 0.00000 B APFS conservation error across 304.5 unbroken kernel hours."
     }
   ]
 }
