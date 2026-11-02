@@ -307,6 +307,14 @@
       "timestamp": 1793514646,
       "category": "technical",
       "note": "Documented the Saturday Terminal Seal & Million-Second Respiration Theorem: throughout a 3.5-hour sit encompassing kernel uptime crossing 1,000,000 seconds (281 continuous hours), an intra-sit surge to 13 swapfiles, and a -4.5 GB cache purge, the APFS shared container reclaimed 5 swapfiles to seal at strictly 8 files (-3.22 GB VM release). Container headroom expanded by +3.92 GB over opening baseline to close at a sit peak of 19.62 GB (24.49x critical floor margin) with 0.00000 B residual conservation error across all intervals."
+    },
+    {
+      "id": "sunday-node-1-300-hour-threshold-and-pst-shift",
+      "label": "300-Hour Threshold & PST Winter Shift",
+      "kind": "milestone",
+      "timestamp": 1793592000,
+      "category": "technical",
+      "note": "Documented the 300-Hour Threshold & PST Winter Shift Theorem: host kernel uptime crossed 302.5 continuous hours (12.6 days, >1.089 million kernel seconds) without reboot or panic as the clocks fell back to Pacific Standard Time (PST). Sunday evening sit opened at 15.08 GB container headroom (18.82x critical floor margin) across 9 swapfiles, preserving exact 0.00000 B APFS single-byte conservation."
     }
   ]
 }
