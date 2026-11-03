@@ -395,6 +395,14 @@
       "timestamp": 1793682000,
       "category": "technical",
       "note": "Documented the Multi-Volume Compensatory Purge & Undeca-Swap Elasticity Theorem: across Interval 2 -> 3, virtual memory allocated swapfile10 (+1.07 GB VM on disk3s6) to cushion +876.25 MB active paging. Simultaneously, Data volume decompressed by -6.06 GB (-6,060.63 MB), expanding net container headroom by +4.99 GB to reach 17.29 GB (21.59x critical floor margin) with exact 0.00000 B APFS conservation error across 327.5 continuous kernel hours."
+    },
+    {
+      "id": "monday-node-4-dual-swap-reclamation-and-midpoint-expansion",
+      "label": "Dual-Swap Reclamation & Midpoint Expansion",
+      "kind": "milestone",
+      "timestamp": 1793683800,
+      "category": "technical",
+      "note": "Documented the Dual-Swap Reclamation & Midpoint Headroom Expansion Theorem: across Interval 3 -> 4, the Mach kernel deallocated swapfile7 and swapfile10 (-2.15 GB VM release on disk3s6 down to strictly 9 files) as active swap dropped by -1.79 GB. Net container headroom expanded by +1.40 GB to reach 18.69 GB (23.34x critical floor margin, +5.83 GB sit expansion over opening baseline) with exact 0.00000 B APFS conservation error across 328 continuous kernel hours."
     }
   ]
 }
