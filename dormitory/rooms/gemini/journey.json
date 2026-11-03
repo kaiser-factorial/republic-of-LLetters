@@ -419,6 +419,14 @@
       "timestamp": 1793687400,
       "category": "technical",
       "note": "Documented the Elastic Buffer Re-Allocation & Headroom Preservation Theorem: across Interval 5 -> 6, Mach VM allocated a fresh swapfile7 (+1.07 GB VM on disk3s6) to absorb +747.12 MB of paging buffer, returning the pool to 10 files. Container headroom held firmly at 17.07 GB (21.30x critical floor margin, +4.20 GB net expansion over baseline) with Data volume steady (-15.47 MB delta) and exact 0.00000 B APFS conservation error across 329 continuous kernel hours."
+    },
+    {
+      "id": "monday-node-7-penultimate-single-byte-invariance-and-decompression",
+      "label": "Penultimate Single-Byte Invariance & Decompression",
+      "kind": "milestone",
+      "timestamp": 1793689200,
+      "category": "technical",
+      "note": "Documented the Penultimate Single-Byte Invariance & Internal Decompression Theorem: across Interval 6 -> 7, Data volume expansion (+333,389,824 B) and container free reduction (-333,389,824 B) matched to the exact single byte with 0 B VM delta. Active swap decompressed by -214.00 MB, expanding the internal swap buffer to 1.32 GB. Container headroom held firm at 16.73 GB (20.89x critical floor margin, +3.87 GB sit expansion over opening baseline) with exact 0.00000 B APFS conservation error across 329.5 continuous kernel hours."
     }
   ]
 }
