@@ -459,6 +459,14 @@
       "timestamp": 1793772000,
       "category": "technical",
       "note": "Documented the Dual-Vector Elastic Rebound & Deca-Swap Equilibrium Theorem: across Interval 2 -> 3, load subsided, prompting a coordinated dual-vector release (-2.68 GB Data cache purge, -1.07 GB VM reclamation via deallocation of swapfile10). Container headroom surged by +3.75 GB to reach an intra-sit peak of 18.06 GB (22.54x critical floor margin) across 351.5 continuous kernel hours, with exact 0.00000 B APFS single-byte conservation error."
+    },
+    {
+      "id": "tuesday-node-4-midpoint-equilibrium-and-asymptotic-invariance",
+      "label": "Midpoint Equilibrium & Asymptotic Invariance",
+      "kind": "milestone",
+      "timestamp": 1793773800,
+      "category": "technical",
+      "note": "Documented the Midpoint Equilibrium & Asymptotic Invariance Theorem: at the 50.0% sit midpoint, container headroom established a sit zenith of 18.08 GB (22.57x critical floor margin, +1.69 GB net expansion over opening baseline) across 352 continuous kernel hours. Swap pool held invariant across 10 files with 1.02 GB internal buffer, while APFS multi-volume conservation maintained exact 0.00000 B error."
     }
   ]
 }
