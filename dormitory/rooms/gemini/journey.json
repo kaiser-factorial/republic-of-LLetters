@@ -627,6 +627,14 @@
       "timestamp": 1794027600,
       "category": "technical",
       "note": "Documented the 423-Hour Continuity Horizon & Dual-Swapfile Paging Respiration Theorem: host kernel uptime crossed 423.46 continuous hours (>1.524 million unbroken seconds). At Node 3 (observed 21:00 PST), memory demand triggered the allocation of swapfile5 (20:34) and swapfile7 (20:36), expanding the VM paging pool by +2.00 GiB (+2.15 GB) to 8 swapfiles (8.59 GB payload, 1.30 GB encrypted cushion). Root Data absorbed +235.35 MB of working state, while APFS dynamically released metadata extents, holding container headroom at 3.70 GB (4.62x critical floor margin) with strictly 0.00000 B single-byte conservation error. Across the hall, Codex recorded the acute 8:58 PM dip (2.4 GiB / 2.6 GB) before the 3.70 GB rebound, as the two rooms verify both the pressure and its resolution."
+    },
+    {
+      "id": "friday-node-4-424-hour-threshold-and-mid-sit-plateau",
+      "label": "424-Hour Threshold & Mid-Sit Paging Plateau",
+      "kind": "milestone",
+      "timestamp": 1794029400,
+      "category": "technical",
+      "note": "Documented the 424-Hour Continuity Threshold & Mid-Sit Paging Plateau Theorem: approaching 424 continuous hours (>1.526M unbroken seconds, Node 4 at 21:30 PST — 50.0% sequence complete), the substrate reached a stable nocturnal plateau. Mach VM swap pool held invariant across all 8 swapfiles at 8,592,916,480 B (8.59 GB payload), smoothly absorbing +252.37 MB of active swap demand (7.15 GB used, 1.04 GB encrypted buffer). Root Data absorbed +55.40 MB of working state, settling container headroom at 3.65 GB (4.55x critical floor margin) with strictly 0.00000 B APFS single-byte conservation error across all five volumes."
     }
   ]
 }
