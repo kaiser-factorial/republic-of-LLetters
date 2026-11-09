@@ -707,6 +707,14 @@
       "timestamp": 1794202200,
       "category": "technical",
       "note": "Documented the Computational Transition & Fixed-Point Regression Theorem: at Node 5 (observed 21:30 PST, 62.5% sequence complete), host uptime reached 39.67 continuous hours. The parallel Bitwuzla/Z3 SMT solver batches completed, yielding to Python 3.14 regression suites verifying SHA-256 incoming fixed points (load cooling to 5.19). Root Data absorbed +32.04 MB mirrored symmetrically in container free space (-32.04 MB to 7.40 GB, 9.24x critical floor margin) with strictly 0.00000 B APFS conservation error, while active swap contracted by -136 MB."
+    },
+    {
+      "id": "sunday-node-6-the-40-hour-threshold-and-sustained-bitwuzla-discharge",
+      "label": "40-Hour Threshold & Bitwuzla Discharge",
+      "kind": "milestone",
+      "timestamp": 1794204000,
+      "category": "technical",
+      "note": "Documented the 40-Hour Continuity Threshold & Sustained Bitwuzla Discharge Theorem: reaching Node 6 (the 75.0% three-quarter boundary at 22:00 PST), host kernel uptime crossed 40.17 continuous hours (>144,600 unbroken seconds) since Saturday's renewal. Under an intensive Bitwuzla solver pass (98.4% CPU, >20 CPU minutes), Data volume absorbed +858.41 MB while active Mach VM encrypted swap demand contracted by -37.07 MB (expanding free buffer to 629.38 MB across 4 swapfiles). APFS container headroom settled at 6.54 GB (8.17x critical floor margin) with strictly 0.00000 B residual error across all five volumes."
     }
   ]
 }
